@@ -110,6 +110,11 @@ entity pexp_control is
     led_status_o      : out std_logic_vector(6 downto 1);
 
     -----------------------------------------------------------------------
+    -- Blinky led
+    -----------------------------------------------------------------------
+    led_blinky_monster_o      : out std_logic;
+
+    -----------------------------------------------------------------------
     -- lvds/lvttl lemos on front panel
     -----------------------------------------------------------------------
     lvtio_in_n_i     : in  std_logic_vector(5 downto 1);
@@ -362,7 +367,10 @@ begin
       pcie_refclk_i          => pcie_refclk_i,
       pcie_rstn_i            => nPCI_RESET,
       pcie_rx_i              => pcie_rx_i,
-      pcie_tx_o              => pcie_tx_o
+      pcie_tx_o              => pcie_tx_o,
+
+      -- ge_en_blinky
+      blinky_led_o           => led_blinky_monster_o
 
   );
 
@@ -412,8 +420,8 @@ begin
 
   -- Front panels status LEDs
   s_led_status_monster(6) <= s_gpio_out(1); -- user LED 1 - RED
-  s_led_status_monster(3) <= s_gpio_out(0); -- user LED 2 - BLUE
-
+  --s_led_status_monster(3) <= s_gpio_out(0); -- user LED 2 - BLUE
+  s_led_status_monster(3) <= not led_blinky_monster_o; -- user LED 2 - BLUE
 
   -- status LED output according to FPGA hex switch position and fpga button
   -- F position - simple led test

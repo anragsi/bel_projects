@@ -53,5 +53,6 @@ modules = {
     "diob",
     "wb_timer",
     "i2c_wrapper",
+    "blinky",
   ]
 }

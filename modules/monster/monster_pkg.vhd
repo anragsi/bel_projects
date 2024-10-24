@@ -132,6 +132,7 @@ package monster_pkg is
       g_en_timer             : boolean := false;
       g_en_eca_tap           : boolean := false;
       g_en_asmi              : boolean := false;
+      g_en_blinky            : boolean := true;
       g_en_psram_delay       : boolean := false
     );
     port(
@@ -405,7 +406,9 @@ package monster_pkg is
       pmc_gnt_i              : in    std_logic := '1';
       -- g_en_user_ow
       ow_io                  : inout std_logic_vector(1 downto 0) := (others => 'Z');
-      hw_version             : in std_logic_vector(31 downto 0) := (others => 'Z'));
+      hw_version             : in std_logic_vector(31 downto 0) := (others => 'Z');
+      -- g_en_blinky
+      blinky_led_o           : out   std_logic);
   end component;
 
   constant c_user_1wire_sdb : t_sdb_device := (

@@ -72,6 +72,7 @@ use work.cpri_phy_reconf_pkg.all;
 use work.beam_dump_pkg.all;
 use work.wb_i2c_wrapper_pkg.all;
 use work.remote_update_pkg.all;
+use work.blinky_pkg.all;
 
 entity monster is
   generic(
@@ -127,7 +128,8 @@ entity monster is
     g_en_timer             : boolean;
     g_en_eca_tap           : boolean;
     g_en_asmi              : boolean;
-    g_en_psram_delay       : boolean);
+    g_en_psram_delay       : boolean;
+    g_en_blinky            : boolean);
   port(
     -- Required: core signals
     core_clk_20m_vcxo_i    : in    std_logic;
@@ -393,8 +395,10 @@ entity monster is
     -- g_en_user_ow
     ow_io                  : inout std_logic_vector(1 downto 0);
     hw_version             : in    std_logic_vector(31 downto 0);
-   -- g_en_tempsens
-    tempsens_clr_out       : out   std_logic);
+    -- g_en_tempsens
+    tempsens_clr_out       : out   std_logic;
+    -- g_en_blinky  
+    blinky_led_o           : out   std_logic);
 end monster;
 
 architecture rtl of monster is
@@ -515,7 +519,8 @@ architecture rtl of monster is
     devs_a10_phy_reconf,
     devs_i2c_wrapper,
     devs_eca_tap,
-    devs_asmi
+    devs_asmi,
+    devs_blinky
   );
   constant c_dev_slaves          : natural := dev_slaves'pos(dev_slaves'right)+1;
 
@@ -558,7 +563,8 @@ architecture rtl of monster is
     dev_slaves'pos(devs_a10_phy_reconf) => f_sdb_auto_device(c_cpri_phy_reconf_sdb,            g_a10_en_phy_reconf),
     dev_slaves'pos(devs_i2c_wrapper)    => f_sdb_auto_device(c_i2c_wrapper_sdb,                g_en_i2c_wrapper),
     dev_slaves'pos(devs_eca_tap)        => f_sdb_auto_device(c_eca_tap_sdb,                    g_en_eca_tap),
-    dev_slaves'pos(devs_asmi)           => f_sdb_auto_device(c_wb_asmi_sdb,                    g_en_asmi));
+    dev_slaves'pos(devs_asmi)           => f_sdb_auto_device(c_wb_asmi_sdb,                    g_en_asmi),
+    dev_slaves'pos(devs_blinky)         => f_sdb_auto_device(c_blinky_sdb,                     g_en_blinky));
   constant c_dev_layout      : t_sdb_record_array := f_sdb_auto_layout(c_dev_layout_req_masters, c_dev_layout_req_slaves);
   constant c_dev_sdb_address : t_wishbone_address := f_sdb_auto_sdb   (c_dev_layout_req_masters, c_dev_layout_req_slaves);
   constant c_dev_bridge_sdb  : t_sdb_bridge       := f_xwb_bridge_layout_sdb(true, c_dev_layout, c_dev_sdb_address);
@@ -3306,7 +3312,21 @@ end generate;
         slave_i     =>  asmi_i,
         slave_o     =>  asmi_o
       );
-   end generate asmi_y;
+  end generate asmi_y;
+
+  blinky_n : if not g_en_blinky generate
+    dev_bus_master_i(dev_slaves'pos(devs_blinky)) <= cc_dummy_slave_out;
+  end generate;
+    
+  blinky_y : if g_en_blinky generate
+    blinky_blink : blinky
+      port map (
+        s_clk_sys_i     => clk_sys,
+        s_rst_sys_i     => rstn_sys,
+        t_wb_out        => dev_bus_master_i(dev_slaves'pos(devs_blinky)),
+        t_wb_in         => dev_bus_master_o(dev_slaves'pos(devs_blinky)),
+        s_led_o         => blinky_led_o);
+  end generate;
 
   -- END OF Wishbone slaves
   ----------------------------------------------------------------------------------
