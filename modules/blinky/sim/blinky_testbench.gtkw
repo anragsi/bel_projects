@@ -1,0 +1,29 @@
+[*]
+[*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
+[*] Wed Oct 23 09:29:17 2024
+[*]
+[dumpfile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.ghw"
+[dumpfile_mtime] "Wed Oct 23 09:26:21 2024"
+[dumpfile_size] 4376305
+[savefile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.gtkw"
+[timestart] 0
+[size] 1280 672
+[pos] -1 -1
+*-27.000000 157000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.blinky_testbench.
+[treeopen] top.blinky_testbench.dut.
+[treeopen] top.blinky_testbench.dut.t_wb_in.
+[treeopen] top.blinky_testbench.dut.t_wb_out.
+[treeopen] top.blinky_testbench.s_wb_slave_in.
+[sst_width] 209
+[signals_width] 300
+[sst_expanded] 1
+[sst_vpaned_height] 353
+@28
+top.blinky_testbench.dut.s_clk_sys_i
+top.blinky_testbench.dut.s_rst_sys_i
+@23
+#{top.blinky_testbench.s_wb_slave_in.dat[31:0]} top.blinky_testbench.s_wb_slave_in.dat[31] top.blinky_testbench.s_wb_slave_in.dat[30] top.blinky_testbench.s_wb_slave_in.dat[29] top.blinky_testbench.s_wb_slave_in.dat[28] top.blinky_testbench.s_wb_slave_in.dat[27] top.blinky_testbench.s_wb_slave_in.dat[26] top.blinky_testbench.s_wb_slave_in.dat[25] top.blinky_testbench.s_wb_slave_in.dat[24] top.blinky_testbench.s_wb_slave_in.dat[23] top.blinky_testbench.s_wb_slave_in.dat[22] top.blinky_testbench.s_wb_slave_in.dat[21] top.blinky_testbench.s_wb_slave_in.dat[20] top.blinky_testbench.s_wb_slave_in.dat[19] top.blinky_testbench.s_wb_slave_in.dat[18] top.blinky_testbench.s_wb_slave_in.dat[17] top.blinky_testbench.s_wb_slave_in.dat[16] top.blinky_testbench.s_wb_slave_in.dat[15] top.blinky_testbench.s_wb_slave_in.dat[14] top.blinky_testbench.s_wb_slave_in.dat[13] top.blinky_testbench.s_wb_slave_in.dat[12] top.blinky_testbench.s_wb_slave_in.dat[11] top.blinky_testbench.s_wb_slave_in.dat[10] top.blinky_testbench.s_wb_slave_in.dat[9] top.blinky_testbench.s_wb_slave_in.dat[8] top.blinky_testbench.s_wb_slave_in.dat[7] top.blinky_testbench.s_wb_slave_in.dat[6] top.blinky_testbench.s_wb_slave_in.dat[5] top.blinky_testbench.s_wb_slave_in.dat[4] top.blinky_testbench.s_wb_slave_in.dat[3] top.blinky_testbench.s_wb_slave_in.dat[2] top.blinky_testbench.s_wb_slave_in.dat[1] top.blinky_testbench.s_wb_slave_in.dat[0]
+[pattern_trace] 1
+[pattern_trace] 0
