@@ -204,7 +204,13 @@ entity pci_control is
 
     sfp4_mod0         : in    std_logic; -- grounded by module
     sfp4_mod1         : inout std_logic; -- SCL
-    sfp4_mod2         : inout std_logic); -- SDA
+    sfp4_mod2         : inout std_logic; -- SDA
+
+    -----------------------------------------------------------------------
+    -- Blinky led
+    -----------------------------------------------------------------------
+    led_blinky_o      : out std_logic);
+
 end pci_control;
 
 architecture rtl of pci_control is
@@ -226,6 +232,11 @@ architecture rtl of pci_control is
 
   signal butis_clk_200 : std_logic;
   signal butis_t0_ts   : std_logic;
+
+  -----------------------------------------------------------------------
+  -- Blinky led
+  -----------------------------------------------------------------------
+  signal s_blinky_led : std_logic;
 
   constant io_mapping_table : t_io_mapping_table_arg_array(0 to 14) :=
   (
@@ -336,7 +347,9 @@ begin
       lcd_scp_o               => di(3),
       lcd_lp_o                => di(1),
       lcd_flm_o               => di(2),
-      lcd_in_o                => di(0));
+      lcd_in_o                => di(0),
+      -- ge_en_blinky
+      blinky_led_o            => s_blinky_led);
 
   -- SFP1-3 are not mounted
   sfp1_tx_disable_o <= '1';
@@ -362,7 +375,10 @@ begin
 
   -- GPIO LEDs
   led(5) <= '0' when gpio_o(0)='1' else 'Z'; -- (baseboard), red
-  led(6) <= '0' when gpio_o(1)='1' else 'Z'; -- blue
+
+  led(6) <= not s_blinky_led;
+
+  --led(6) <= '0' when gpio_o(1)='1' else 'Z'; -- blue
   led(7) <= '0' when gpio_o(2)='1' else 'Z'; -- green
   led(8) <= '0' when gpio_o(3)='1' else 'Z'; -- white
   p7     <= '0' when gpio_o(4)='1' else 'Z'; -- (add-on board), red

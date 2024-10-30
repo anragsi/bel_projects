@@ -112,7 +112,7 @@ entity pexp_control is
     -----------------------------------------------------------------------
     -- Blinky led
     -----------------------------------------------------------------------
-    led_blinky_monster_o      : out std_logic;
+    led_blinky_o      : out std_logic;
 
     -----------------------------------------------------------------------
     -- lvds/lvttl lemos on front panel
@@ -202,9 +202,12 @@ architecture rtl of pexp_control is
   -- logic analyzer
   signal s_log_oe   : std_logic_vector(16 downto 0);
   signal s_log_out  : std_logic_vector(16 downto 0);
-  signal s_log_in   : std_logic_vector(16 downto 0);
+  signal s_log_in   : std_logic_vector(16 downto 0);v
 
-
+  -----------------------------------------------------------------------
+  -- Blinky led
+  -----------------------------------------------------------------------
+  signal s_blinky_led : std_logic;
 
   constant io_mapping_table : t_io_mapping_table_arg_array(0 to 23) :=
   (
@@ -370,7 +373,7 @@ begin
       pcie_tx_o              => pcie_tx_o,
 
       -- ge_en_blinky
-      blinky_led_o           => led_blinky_monster_o
+      blinky_led_o           => s_blinky_led
 
   );
 
@@ -421,7 +424,7 @@ begin
   -- Front panels status LEDs
   s_led_status_monster(6) <= s_gpio_out(1); -- user LED 1 - RED
   --s_led_status_monster(3) <= s_gpio_out(0); -- user LED 2 - BLUE
-  s_led_status_monster(3) <= not led_blinky_monster_o; -- user LED 2 - BLUE
+  s_led_status_monster(3) <= not s_blinky_led; -- user LED 2 - BLUE
 
   -- status LED output according to FPGA hex switch position and fpga button
   -- F position - simple led test

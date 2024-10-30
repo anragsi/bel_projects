@@ -20,7 +20,7 @@ package blinky_pkg is
     vendor_id     => x"0000000000000651",
     device_id     => x"434E5452",
     version       => x"00000001",
-    date          => x"20240711",
+    date          => x"20241025",
     name          => "GSI:BLINKBLINKBLINK")));
 
   component blinky is
