@@ -423,8 +423,7 @@ begin
 
   -- Front panels status LEDs
   s_led_status_monster(6) <= s_gpio_out(1); -- user LED 1 - RED
-  --s_led_status_monster(3) <= s_gpio_out(0); -- user LED 2 - BLUE
-  s_led_status_monster(3) <= not s_blinky_led; -- user LED 2 - BLUE
+  s_led_status_monster(3) <= s_blinky_led; -- user LED 2 - BLUE
 
   -- status LED output according to FPGA hex switch position and fpga button
   -- F position - simple led test
