@@ -202,7 +202,7 @@ architecture rtl of pexp_control is
   -- logic analyzer
   signal s_log_oe   : std_logic_vector(16 downto 0);
   signal s_log_out  : std_logic_vector(16 downto 0);
-  signal s_log_in   : std_logic_vector(16 downto 0);v
+  signal s_log_in   : std_logic_vector(16 downto 0);
 
   -----------------------------------------------------------------------
   -- Blinky led

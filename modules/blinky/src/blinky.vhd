@@ -45,12 +45,16 @@ architecture blinky_arch of blinky is
 
   signal s_led_state        : std_logic := '0';
 
+  signal s_stall_state        : std_logic := '0';
+
 begin
   
   --  for now no errors, no stalling
   t_wb_out.err    <= '0';
-  t_wb_out.stall  <= '0';
+  t_wb_out.stall  <= s_stall_state;
   t_wb_out.rty    <= '0';
+
+  s_led_o <= s_led_state;
 
   -- single read write cycle
   p_wb_read_write: process(s_clk_sys_i, s_rst_sys_i)
@@ -65,8 +69,8 @@ begin
       t_wb_out.ack    <= '0';
       t_wb_out.dat    <= (others => '0');
 
-      s_led_o <= '0';
       s_led_state <= '0';
+      s_stall_state <= '0';
 
     -- otherwise listen for rising edge
     elsif rising_edge(s_clk_sys_i) then
@@ -74,30 +78,24 @@ begin
       -- DO THE HANDSHAKE
       -- be quick no stalling
       --t_wb_out.ack <= '1';
-      t_wb_out.ack <= t_wb_in.cyc and t_wb_in.stb;
+      t_wb_out.ack    <= '0';
+      t_wb_out.dat(0) <= s_led_state;
         
       -- are we selected?
       -- STB on 1 (strobe is kind of chip select)
       -- CYC on 1 (bus cycle, active high)
-      if t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
+      if t_wb_in.stb = '1' and t_wb_in.cyc = '1' and s_stall_state = '0'  then
 
         -- DO THE HANDSHAKE
         -- be quick no stalling
         t_wb_out.ack <= '1';
-        t_wb_out.ack <= t_wb_in.cyc and t_wb_in.stb;
-        -- READ
-        -- WE on 0 (write enable, active high)
-        if t_wb_in.we = '0' then
-
-            s_led_o <= t_wb_in.dat(0);
-            s_led_state <= t_wb_in.dat(0);
-
+        
         -- WRITE
         -- WE on 1 (write enable, active high)
-        else
-          report("WRITING");
-          -- put data on output
-          t_wb_out.dat(0) <= s_led_state;
+        if t_wb_in.we = '1' then
+
+            s_led_state <= t_wb_in.dat(0);
+
 
         end if;
 
