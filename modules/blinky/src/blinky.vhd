@@ -86,7 +86,7 @@ begin
 
       s_led_freq_ctl  <= '1';
       s_count         <=  1;
-      s_compare_to    <=  15; --1
+      s_compare_to    <=  15000;
 
     -- otherwise listen for rising edge
     elsif rising_edge(s_clk_sys_i) then
@@ -94,8 +94,6 @@ begin
       -- write signals
       t_wb_out.ack    <= '0';
       t_wb_out.dat(0) <= s_led_state;
-
-      s_count <= s_count + 1;
         
       -- are we selected?
       -- STB on 1 (strobe is kind of chip select)
@@ -110,30 +108,32 @@ begin
         -- WE on 1 (write enable, active high)
         if t_wb_in.we = '1' then
 
-            s_led_state     <= t_wb_in.dat(0);
-            -- s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
+          s_led_state     <= t_wb_in.dat(0);
+          s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
 
-            -- case s_blinky_mode_v is
-            --   when s_blinky_mode_A =>
-            --     s_compare_to <= 1;
-            --   when s_blinky_mode_B =>
-            --     s_compare_to <= 15; --15000
-            --   when s_blinky_mode_C =>
-            --     s_compare_to <= 30; --30000
-            --   when others =>
-            --     s_compare_to <= 0;
-            -- end case;
+          case s_blinky_mode_v is
+            when s_blinky_mode_A =>
+              s_compare_to <= 15000;
+            when s_blinky_mode_B =>
+              s_compare_to <= 30000;
+            when s_blinky_mode_C =>
+              s_compare_to <= 1;
+            when others =>
+              s_compare_to <= 0;
+          end case;
 
-        
+        end if;
 
       elsif (s_count = s_compare_to) then
 
         s_led_freq_ctl  <= not s_led_freq_ctl;
         s_count         <= 1;
 
-        end if;
+      else
 
-      end if; -- WRITE: wishbone_i.stb = '1' and wishbone_i.cyc = '1' and wishbone_i.we = '1'
+        s_count       <= s_count + 1;
+
+      end if;
 
     end if; --rstn_sys_i
 
