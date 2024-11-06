@@ -2,7 +2,7 @@
 TB_NAME="blinky_testbench"
 GHDL_BIN="ghdl"
 GHDL_FLAGS="--ieee=synopsys --warn-no-vital-generic"
-STOP_TIME="15ms"
+STOP_TIME="10ms"
 VCD_NAME="$TB_NAME.vcd"
 GHW_NAME="$TB_NAME.ghw"
 VCD_VIEWER="gtkwave"

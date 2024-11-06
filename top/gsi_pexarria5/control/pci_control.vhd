@@ -349,7 +349,9 @@ begin
       lcd_flm_o               => di(2),
       lcd_in_o                => di(0),
       -- ge_en_blinky
-      blinky_led_o            => s_blinky_led);
+      blinky_led_o            => s_blinky_led
+      
+    );
 
   -- SFP1-3 are not mounted
   sfp1_tx_disable_o <= '1';
@@ -364,7 +366,8 @@ begin
   di(4) <= '0' when (    led_link_up and     led_track) = '1' else 'Z'; -- green
 
   led(1) <= not (led_link_act and led_link_up); -- red   = traffic/no-link
-  led(2) <= not led_link_up;                    -- blue  = link
+  --led(2) <= not led_link_up;                  -- blue  = link
+  led(2) <= not s_blinky_led;
   led(3) <= not led_track;                      -- green = timing valid
   led(4) <= not led_pps;                        -- white = PPS
 
@@ -375,10 +378,7 @@ begin
 
   -- GPIO LEDs
   led(5) <= '0' when gpio_o(0)='1' else 'Z'; -- (baseboard), red
-
-  led(6) <= not s_blinky_led;
-
-  --led(6) <= '0' when gpio_o(1)='1' else 'Z'; -- blue
+  led(6) <= '0' when gpio_o(1)='1' else 'Z'; -- blue
   led(7) <= '0' when gpio_o(2)='1' else 'Z'; -- green
   led(8) <= '0' when gpio_o(3)='1' else 'Z'; -- white
   p7     <= '0' when gpio_o(4)='1' else 'Z'; -- (add-on board), red

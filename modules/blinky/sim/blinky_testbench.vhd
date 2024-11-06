@@ -26,6 +26,10 @@ architecture blinky_testbench_architecture of blinky_testbench is
   constant c_blinky_on    : std_logic_vector(31 downto 0) := x"00000001";
   constant c_blinky_off   : std_logic_vector(31 downto 0) := x"00000000";
 
+  constant c_blinky_mode_a    : std_logic_vector(31 downto 0) := x"00000000";
+  constant c_blinky_mode_b    : std_logic_vector(31 downto 0) := x"00000000";
+  constant c_blinky_mode_c    : std_logic_vector(31 downto 0) := x"00000000";
+
   -- Other constants
   constant c_reg_all_zero                : std_logic_vector(31 downto 0) := x"00000000";
   constant c_cyc_on                      : std_logic := '1';

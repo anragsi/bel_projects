@@ -42,10 +42,19 @@ end entity;
 architecture blinky_arch of blinky is
 
   signal s_rst_sys_n        : std_logic := '0';
-
   signal s_led_state        : std_logic := '0';
+  signal s_stall_state      : std_logic := '0';
 
-  signal s_stall_state        : std_logic := '0';
+  signal s_led_freq_ctl     : std_logic := '0';
+  signal s_count            : integer   :=  1;
+  signal s_compare_to       : integer   :=  1;
+
+  signal  s_blinky_mode_bin : natural range 0 to 7;
+  signal  s_blinky_mode_v   : std_logic_vector(2 downto 0);
+
+  constant s_blinky_mode_A  : std_logic_vector(2 downto 0) := "000";
+  constant s_blinky_mode_B  : std_logic_vector(2 downto 0) := "001";
+  constant s_blinky_mode_C  : std_logic_vector(2 downto 0) := "100";
 
 begin
   
@@ -54,7 +63,7 @@ begin
   t_wb_out.stall  <= s_stall_state;
   t_wb_out.rty    <= '0';
 
-  s_led_o <= s_led_state;
+  s_led_o <= s_led_state and s_led_freq_ctl;
 
   -- single read write cycle
   p_wb_read_write: process(s_clk_sys_i, s_rst_sys_i)
@@ -69,17 +78,24 @@ begin
       t_wb_out.ack    <= '0';
       t_wb_out.dat    <= (others => '0');
 
-      s_led_state <= '0';
-      s_stall_state <= '0';
+      s_led_state     <= '0';
+      s_stall_state   <= '0';
+
+      s_blinky_mode_v   <= (others => '0');
+      s_blinky_mode_bin <= 0;
+
+      s_led_freq_ctl  <= '1';
+      s_count         <=  1;
+      s_compare_to    <=  15; --1
 
     -- otherwise listen for rising edge
     elsif rising_edge(s_clk_sys_i) then
 
-      -- DO THE HANDSHAKE
-      -- be quick no stalling
-      --t_wb_out.ack <= '1';
+      -- write signals
       t_wb_out.ack    <= '0';
       t_wb_out.dat(0) <= s_led_state;
+
+      s_count <= s_count + 1;
         
       -- are we selected?
       -- STB on 1 (strobe is kind of chip select)
@@ -94,10 +110,26 @@ begin
         -- WE on 1 (write enable, active high)
         if t_wb_in.we = '1' then
 
-            s_led_state <= t_wb_in.dat(0);
+            s_led_state     <= t_wb_in.dat(0);
+            -- s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
 
+            -- case s_blinky_mode_v is
+            --   when s_blinky_mode_A =>
+            --     s_compare_to <= 1;
+            --   when s_blinky_mode_B =>
+            --     s_compare_to <= 15; --15000
+            --   when s_blinky_mode_C =>
+            --     s_compare_to <= 30; --30000
+            --   when others =>
+            --     s_compare_to <= 0;
+            -- end case;
 
         end if;
+
+    elsif (s_count = s_compare_to) then
+
+      s_led_freq_ctl  <= not s_led_freq_ctl;
+      s_count         <= 1;
 
       end if; -- WRITE: wishbone_i.stb = '1' and wishbone_i.cyc = '1' and wishbone_i.we = '1'
 
