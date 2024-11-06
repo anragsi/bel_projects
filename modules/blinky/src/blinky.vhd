@@ -49,7 +49,6 @@ architecture blinky_arch of blinky is
   signal s_count            : integer   :=  1;
   signal s_compare_to       : integer   :=  1;
 
-  signal  s_blinky_mode_bin : natural range 0 to 7;
   signal  s_blinky_mode_v   : std_logic_vector(2 downto 0);
 
   constant s_blinky_mode_A  : std_logic_vector(2 downto 0) := "000";
@@ -82,58 +81,55 @@ begin
       s_stall_state   <= '0';
 
       s_blinky_mode_v   <= (others => '0');
-      s_blinky_mode_bin <= 0;
-
       s_led_freq_ctl  <= '1';
       s_count         <=  1;
-      s_compare_to    <=  15000;
+      s_compare_to    <=  15; --15000
 
     -- otherwise listen for rising edge
     elsif rising_edge(s_clk_sys_i) then
 
-      -- write signals
-      t_wb_out.ack    <= '0';
-      t_wb_out.dat(0) <= s_led_state;
-        
-      -- are we selected?
-      -- STB on 1 (strobe is kind of chip select)
-      -- CYC on 1 (bus cycle, active high)
-      if t_wb_in.stb = '1' and t_wb_in.cyc = '1' and s_stall_state = '0'  then
+        -- just always write out
+        t_wb_out.ack    <= '0';
+        t_wb_out.dat(0) <= s_led_state;
+        t_wb_out.dat(1) <= s_blinky_mode_v(0);
+        t_wb_out.dat(2) <= s_blinky_mode_v(1);
+        t_wb_out.dat(3) <= s_blinky_mode_v(2);
 
-        -- DO THE HANDSHAKE
-        -- be quick no stalling
-        t_wb_out.ack <= '1';
-        
-        -- WRITE
-        -- WE on 1 (write enable, active high)
-        if t_wb_in.we = '1' then
+        -- is our counter full?
+        if (s_count = s_compare_to) then
 
-          s_led_state     <= t_wb_in.dat(0);
-          s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
+          s_led_freq_ctl  <= not s_led_freq_ctl;
+          s_count         <= 1;
+
+        else
+
+          s_count       <= s_count + 1;
+
+        end if;
+          
+        -- are we selected?
+        -- STB on 1 (strobe is kind of chip select)
+        -- CYC on 1 (bus cycle, active high)
+        if t_wb_in.stb = '1' and t_wb_in.cyc = '1' and s_stall_state = '0'  then
+
+          s_led_state <= t_wb_in.dat(0);
+          t_wb_out.ack <= '1';
+          s_blinky_mode_v(0) <=  t_wb_in.dat(1);
+          s_blinky_mode_v(1) <=  t_wb_in.dat(2);
+          s_blinky_mode_v(2) <=  t_wb_in.dat(3);
 
           case s_blinky_mode_v is
             when s_blinky_mode_A =>
-              s_compare_to <= 15000;
+              s_compare_to <= 15; --15000
             when s_blinky_mode_B =>
-              s_compare_to <= 30000;
+              s_compare_to <= 30; --30000
             when s_blinky_mode_C =>
               s_compare_to <= 1;
             when others =>
-              s_compare_to <= 0;
+              s_compare_to <= 1;
           end case;
 
         end if;
-
-      elsif (s_count = s_compare_to) then
-
-        s_led_freq_ctl  <= not s_led_freq_ctl;
-        s_count         <= 1;
-
-      else
-
-        s_count       <= s_count + 1;
-
-      end if;
 
     end if; --rstn_sys_i
 

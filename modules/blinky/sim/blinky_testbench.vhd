@@ -25,10 +25,8 @@ architecture blinky_testbench_architecture of blinky_testbench is
   constant c_blinky_adr   : std_logic_vector(31 downto 0) := x"00000000";
   constant c_blinky_on    : std_logic_vector(31 downto 0) := x"00000001";
   constant c_blinky_off   : std_logic_vector(31 downto 0) := x"00000000";
-
-  constant c_blinky_mode_a    : std_logic_vector(31 downto 0) := x"00000000";
-  constant c_blinky_mode_b    : std_logic_vector(31 downto 0) := x"00000000";
-  constant c_blinky_mode_c    : std_logic_vector(31 downto 0) := x"00000000";
+  constant c_blinky_B_on  : std_logic_vector(31 downto 0) := x"00000011";
+  constant c_blinky_C_on  : std_logic_vector(31 downto 0) := x"00000101";
 
   -- Other constants
   constant c_reg_all_zero                : std_logic_vector(31 downto 0) := x"00000000";
@@ -144,7 +142,7 @@ architecture blinky_testbench_architecture of blinky_testbench is
         wait for c_light_time / 2;
         -- Try read
         wait until rising_edge(s_clk); 
-        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_off, c_blinky_adr, c_blinky_off);
+        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_on, c_blinky_adr, c_blinky_off);
         report("Sent READ: LED_OFF");
         wait for c_light_time / 2;
         if (s_led_state = '0') then
@@ -153,7 +151,7 @@ architecture blinky_testbench_architecture of blinky_testbench is
         wait for c_light_time / 2;
         -- Try read
         wait until rising_edge(s_clk); 
-        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_off, c_blinky_adr, c_blinky_on);
+        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_on, c_blinky_adr, c_blinky_on);
         report("Sent READ: LED_ON");
         wait for c_light_time / 2;
         if (s_led_state = '1') then
@@ -162,12 +160,18 @@ architecture blinky_testbench_architecture of blinky_testbench is
         wait for c_light_time / 2;
         -- Try write
         wait until rising_edge(s_clk);
-        s_wb_slave_in <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_adr, c_blinky_on);
-        report("Sent WRITE: LED_ON");
+        s_wb_slave_in <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_adr, c_blinky_B_on);
+        report("Sent WRITE: MODE_B_ON");
+        wait for c_light_time;
+        wait until rising_edge(s_clk);
+        -- Try write
+        wait until rising_edge(s_clk);
+        s_wb_slave_in <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_adr, c_blinky_C_on);
+        report("Sent WRITE: MODE_C_ON");
         wait for c_light_time;
         wait until rising_edge(s_clk);
         -- turn it of again
-        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_off, c_blinky_adr, c_reg_all_zero);
+        s_wb_slave_in <= wb_stim(c_cyc_on,  c_str_on,  c_we_on, c_blinky_adr, c_reg_all_zero);
         wait for c_light_time;
         wait until rising_edge(s_clk);
 
