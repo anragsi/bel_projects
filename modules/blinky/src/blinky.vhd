@@ -88,13 +88,6 @@ begin
     -- otherwise listen for rising edge
     elsif rising_edge(s_clk_sys_i) then
 
-        -- just always write out
-        t_wb_out.ack    <= '0';
-        t_wb_out.dat(0) <= s_led_state;
-        t_wb_out.dat(1) <= s_blinky_mode_v(0);
-        t_wb_out.dat(2) <= s_blinky_mode_v(1);
-        t_wb_out.dat(3) <= s_blinky_mode_v(2);
-
         -- is our counter full?
         if (s_count = s_compare_to) then
 
@@ -128,6 +121,15 @@ begin
             when others =>
               s_compare_to <= 1;
           end case;
+
+          -- write
+          if t_wb_in.we = '1' then
+            t_wb_out.ack    <= '0';
+            t_wb_out.dat(0) <= s_led_state;
+            t_wb_out.dat(1) <= s_blinky_mode_v(0);
+            t_wb_out.dat(2) <= s_blinky_mode_v(1);
+            t_wb_out.dat(3) <= s_blinky_mode_v(2);
+          end if;
 
         end if;
 
