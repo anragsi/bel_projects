@@ -124,12 +124,14 @@ begin
             --     s_compare_to <= 0;
             -- end case;
 
+        
+
+      elsif (s_count = s_compare_to) then
+
+        s_led_freq_ctl  <= not s_led_freq_ctl;
+        s_count         <= 1;
+
         end if;
-
-    elsif (s_count = s_compare_to) then
-
-      s_led_freq_ctl  <= not s_led_freq_ctl;
-      s_count         <= 1;
 
       end if; -- WRITE: wishbone_i.stb = '1' and wishbone_i.cyc = '1' and wishbone_i.we = '1'
 
