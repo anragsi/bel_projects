@@ -63,6 +63,7 @@ begin
   t_wb_out.rty    <= '0';
 
   s_led_o <= s_led_state and s_led_freq_ctl;
+  t_wb_out.ack <= t_wb_in.stb and t_wb_in.cyc;
 
   -- single read write cycle
   p_wb_read_write: process(s_clk_sys_i, s_rst_sys_i)
@@ -103,32 +104,33 @@ begin
         -- are we selected?
         -- STB on 1 (strobe is kind of chip select)
         -- CYC on 1 (bus cycle, active high)
-        if t_wb_in.stb = '1' and t_wb_in.cyc = '1' and s_stall_state = '0'  then
+        if t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
+          
+          t_wb_out.dat(0) <= s_led_state;
 
-          s_led_state <= t_wb_in.dat(0);
-          t_wb_out.ack <= '1';
-          s_blinky_mode_v(0) <=  t_wb_in.dat(1);
-          s_blinky_mode_v(1) <=  t_wb_in.dat(2);
-          s_blinky_mode_v(2) <=  t_wb_in.dat(3);
-
-          case s_blinky_mode_v is
-            when s_blinky_mode_A =>
-              s_compare_to <= 15; --15000
-            when s_blinky_mode_B =>
-              s_compare_to <= 30; --30000
-            when s_blinky_mode_C =>
-              s_compare_to <= 1;
-            when others =>
-              s_compare_to <= 1;
-          end case;
+          t_wb_out.dat(1) <= s_blinky_mode_v(0);
+          t_wb_out.dat(2) <= s_blinky_mode_v(1);
+          t_wb_out.dat(3) <= s_blinky_mode_v(2);
 
           -- write
           if t_wb_in.we = '1' then
-            t_wb_out.ack    <= '0';
-            t_wb_out.dat(0) <= s_led_state;
-            t_wb_out.dat(1) <= s_blinky_mode_v(0);
-            t_wb_out.dat(2) <= s_blinky_mode_v(1);
-            t_wb_out.dat(3) <= s_blinky_mode_v(2);
+            
+            s_led_state        <= t_wb_in.dat(0);
+            s_blinky_mode_v(0) <= t_wb_in.dat(1); 
+            s_blinky_mode_v(1) <= t_wb_in.dat(2); 
+            s_blinky_mode_v(2) <= t_wb_in.dat(3);
+
+            case s_blinky_mode_v is
+              when s_blinky_mode_A =>
+                s_compare_to <= 15; --15000
+              when s_blinky_mode_B =>
+                s_compare_to <= 30; --30000
+              when s_blinky_mode_C =>
+                s_compare_to <= 1;
+              when others =>
+                s_compare_to <= 1;
+            end case;
+
           end if;
 
         end if;
