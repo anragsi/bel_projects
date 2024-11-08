@@ -134,6 +134,7 @@ function to_logic_to_int(x : std_logic) return natural is
         --
         s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off, c_blinky_off);
         wait until rising_edge(s_rst_n);
+        wait for c_clock_cycle;
         -- RESET inactive
         --
         -- test SINGLE WRITE
@@ -141,8 +142,8 @@ function to_logic_to_int(x : std_logic) return natural is
         for i in 1 to c_test_write loop
           wait until rising_edge(s_clk);
           s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_on);
-          report ("c_blinky_on(0) is: ");
-          report std_logic'image(c_blinky_on(0));
+          --report ("c_blinky_on(0) is: ");
+          --report std_logic'image(c_blinky_on(0));
           wait for c_clock_cycle;
           s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off,c_blinky_off);
           wait for 160 ns;

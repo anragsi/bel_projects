@@ -89,13 +89,13 @@ begin
     s_state_machine_vector(3) <= t_wb_in.we;
 
     -- single read write cycle
-    p_wb_read_write: process(s_clk_sys_i, s_rst_sys_n_i)
+    p_wb_read_write: process(s_clk_sys_i)
 
     begin
 
-        if rising_edge(s_clk_sys_i) then
+        if rising_edge(s_clk_sys_i) then --WHY IS THIS BREAKING EVERYTHING???
 
-            case s_state_machine_vector is
+        case s_state_machine_vector is
 
                 when mode_reset_0 | mode_reset_1 | mode_reset_2 | mode_reset_3 | mode_reset_4 | mode_reset_5 | mode_reset_6 =>
 
@@ -119,10 +119,12 @@ begin
 
                 when mode_write =>
 
+                    
                     s_led_state <= t_wb_in.dat(0);
                     report("inside write: 1111");
                     report std_logic'image(t_wb_in.dat(0));
                     report std_logic'image(t_wb_in.dat(31));
+                    
       
                 -- END WRITE
 
@@ -130,8 +132,6 @@ begin
 
                     t_wb_out.dat(0) <= s_led_state;
                     report("inside read: 0111");
-                    report std_logic'image(t_wb_out.dat(0));
-                    report std_logic'image(t_wb_in.dat(31));
           
                 -- END READ
 

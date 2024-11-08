@@ -1,29 +1,43 @@
 [*]
-[*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
-[*] Wed Nov  6 15:37:13 2024
+[*] GTKWave Analyzer v3.3.116 (w)1999-2023 BSI
+[*] Fri Nov  8 08:05:15 2024
 [*]
 [dumpfile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.ghw"
-[dumpfile_mtime] "Wed Nov  6 15:36:51 2024"
-[dumpfile_size] 10287077
+[dumpfile_mtime] "Thu Nov  7 14:55:45 2024"
+[dumpfile_size] 2802
 [savefile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.gtkw"
 [timestart] 0
-[size] 1280 672
+[size] 1920 1032
 [pos] -1 -1
-*-27.000000 89200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.198469 89200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.blinky_testbench.
 [treeopen] top.blinky_testbench.dut.
 [treeopen] top.blinky_testbench.dut.t_wb_in.
 [treeopen] top.blinky_testbench.dut.t_wb_out.
+[treeopen] top.blinky_testbench.s_wb_master_in.
+[treeopen] top.blinky_testbench.s_wb_master_out.
 [sst_width] 209
 [signals_width] 300
 [sst_expanded] 1
-[sst_vpaned_height] 353
+[sst_vpaned_height] 600
 @28
 top.blinky_testbench.dut.s_clk_sys_i
-@29
-top.blinky_testbench.dut.s_rst_sys_i
-@28
 top.blinky_testbench.dut.s_stall_state
+top.blinky_testbench.s_clk
+top.blinky_testbench.dut.s_clk_sys_i
+top.blinky_testbench.s_rst_n
+top.blinky_testbench.dut.s_rst_sys_n_i
+top.blinky_testbench.dut.s_stall_state
+top.blinky_testbench.dut.t_wb_in.cyc
+top.blinky_testbench.dut.t_wb_in.stb
+top.blinky_testbench.dut.t_wb_out.ack
+@22
+#{top.blinky_testbench.s_wb_master_out.dat[31:0]} top.blinky_testbench.s_wb_master_out.dat[31] top.blinky_testbench.s_wb_master_out.dat[30] top.blinky_testbench.s_wb_master_out.dat[29] top.blinky_testbench.s_wb_master_out.dat[28] top.blinky_testbench.s_wb_master_out.dat[27] top.blinky_testbench.s_wb_master_out.dat[26] top.blinky_testbench.s_wb_master_out.dat[25] top.blinky_testbench.s_wb_master_out.dat[24] top.blinky_testbench.s_wb_master_out.dat[23] top.blinky_testbench.s_wb_master_out.dat[22] top.blinky_testbench.s_wb_master_out.dat[21] top.blinky_testbench.s_wb_master_out.dat[20] top.blinky_testbench.s_wb_master_out.dat[19] top.blinky_testbench.s_wb_master_out.dat[18] top.blinky_testbench.s_wb_master_out.dat[17] top.blinky_testbench.s_wb_master_out.dat[16] top.blinky_testbench.s_wb_master_out.dat[15] top.blinky_testbench.s_wb_master_out.dat[14] top.blinky_testbench.s_wb_master_out.dat[13] top.blinky_testbench.s_wb_master_out.dat[12] top.blinky_testbench.s_wb_master_out.dat[11] top.blinky_testbench.s_wb_master_out.dat[10] top.blinky_testbench.s_wb_master_out.dat[9] top.blinky_testbench.s_wb_master_out.dat[8] top.blinky_testbench.s_wb_master_out.dat[7] top.blinky_testbench.s_wb_master_out.dat[6] top.blinky_testbench.s_wb_master_out.dat[5] top.blinky_testbench.s_wb_master_out.dat[4] top.blinky_testbench.s_wb_master_out.dat[3] top.blinky_testbench.s_wb_master_out.dat[2] top.blinky_testbench.s_wb_master_out.dat[1] top.blinky_testbench.s_wb_master_out.dat[0]
+@23
+#{top.blinky_testbench.s_wb_master_in.dat[31:0]} top.blinky_testbench.s_wb_master_in.dat[31] top.blinky_testbench.s_wb_master_in.dat[30] top.blinky_testbench.s_wb_master_in.dat[29] top.blinky_testbench.s_wb_master_in.dat[28] top.blinky_testbench.s_wb_master_in.dat[27] top.blinky_testbench.s_wb_master_in.dat[26] top.blinky_testbench.s_wb_master_in.dat[25] top.blinky_testbench.s_wb_master_in.dat[24] top.blinky_testbench.s_wb_master_in.dat[23] top.blinky_testbench.s_wb_master_in.dat[22] top.blinky_testbench.s_wb_master_in.dat[21] top.blinky_testbench.s_wb_master_in.dat[20] top.blinky_testbench.s_wb_master_in.dat[19] top.blinky_testbench.s_wb_master_in.dat[18] top.blinky_testbench.s_wb_master_in.dat[17] top.blinky_testbench.s_wb_master_in.dat[16] top.blinky_testbench.s_wb_master_in.dat[15] top.blinky_testbench.s_wb_master_in.dat[14] top.blinky_testbench.s_wb_master_in.dat[13] top.blinky_testbench.s_wb_master_in.dat[12] top.blinky_testbench.s_wb_master_in.dat[11] top.blinky_testbench.s_wb_master_in.dat[10] top.blinky_testbench.s_wb_master_in.dat[9] top.blinky_testbench.s_wb_master_in.dat[8] top.blinky_testbench.s_wb_master_in.dat[7] top.blinky_testbench.s_wb_master_in.dat[6] top.blinky_testbench.s_wb_master_in.dat[5] top.blinky_testbench.s_wb_master_in.dat[4] top.blinky_testbench.s_wb_master_in.dat[3] top.blinky_testbench.s_wb_master_in.dat[2] top.blinky_testbench.s_wb_master_in.dat[1] top.blinky_testbench.s_wb_master_in.dat[0]
+@28
+top.blinky_testbench.dut.s_led_o
+top.blinky_testbench.dut.s_led_state
 [pattern_trace] 1
 [pattern_trace] 0
