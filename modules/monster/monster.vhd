@@ -3322,7 +3322,7 @@ end generate;
     blinky_blink : blinky
       port map (
         s_clk_sys_i     => clk_sys,
-        s_rst_sys_i     => rstn_sys,
+        s_rst_sys_n_i   => rstn_sys,
         t_wb_out        => dev_bus_master_i(dev_slaves'pos(devs_blinky)),
         t_wb_in         => dev_bus_master_o(dev_slaves'pos(devs_blinky)),
         s_led_o         => blinky_led_o);

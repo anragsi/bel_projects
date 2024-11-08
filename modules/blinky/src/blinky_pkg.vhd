@@ -27,7 +27,7 @@ package blinky_pkg is
 
     port(
     s_clk_sys_i     : in std_logic;
-    s_rst_sys_i     : in std_logic;
+    s_rst_sys_n_i   : in std_logic;
 
     t_wb_out        : out t_wishbone_slave_out;
     t_wb_in         : in  t_wishbone_slave_in;
