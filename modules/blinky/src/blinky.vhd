@@ -10,29 +10,31 @@ entity blinky is
 
     port(
     
-    -- these two sys signal come from SysCon
-    s_clk_sys_i       : in std_ulogic;
-    s_rst_sys_n_i     : in std_ulogic;
+    -- these two sys signals come from SysCon
+    s_clk_sys_i       : in std_logic;
+    s_rst_sys_n_i     : in std_logic;
 
 
     t_wb_out          : out t_wishbone_slave_out;
-      -- type t_wishbone_slave_out is record
-      -- ack   : std_logic;
-      -- err   : std_logic;
-      -- rty   : std_logic;
-      -- stall : std_logic;
-      -- dat   : t_wishbone_data;
-      -- end record t_wishbone_slave_out;
+        -- type t_wishbone_slave_out is record
+        -- ack   : std_logic;
+        -- err   : std_logic;
+        -- rty   : std_logic;
+        -- stall : std_logic;
+        -- dat   : t_wishbone_data;
+        -- end record t_wishbone_slave_out;
+        -- equal to t_wishbone_master_in
 
     t_wb_in            : in  t_wishbone_slave_in;
-      --type t_wishbone_slave_in is record
-      --cyc : std_logic;
-      --stb : std_logic;
-      --adr : t_wishbone_address;
-      --sel : t_wishbone_byte_select;
-      --we  : std_logic;
-      --dat : t_wishbone_data;
-      --end record t_wishbone_slave_in;
+        --type t_wishbone_slave_in is record
+        --cyc : std_logic;
+        --stb : std_logic;
+        --adr : t_wishbone_address;
+        --sel : t_wishbone_byte_select;
+        --we  : std_logic;
+        --dat : t_wishbone_data;
+        --end record t_wishbone_slave_in;
+        -- equal to t_wishbone_master_out
 
     s_led_o           : out std_logic
     );
@@ -41,7 +43,7 @@ end entity;
 
 architecture blinky_arch of blinky is
 
-    --signal s_rst_sys_n        : std_logic := '0';
+    signal s_ack_state        : std_logic := '0';
     signal s_led_state        : std_logic := '0';
     signal s_stall_state      : std_logic := '0';
 
@@ -76,74 +78,61 @@ begin
     t_wb_out.stall  <= s_stall_state;
     t_wb_out.rty    <= '0';
 
-    t_wb_out.ack <= t_wb_in.stb and t_wb_in.cyc;
-
     s_led_o <= s_led_state;
+    t_wb_out.ack <= s_ack_state;
     --s_led_o <= s_led_state and s_led_freq_ctl;
 
 
     -- fill the stupid pseudo state machine
-    s_state_machine_vector(0) <= s_rst_sys_n_i;
-    s_state_machine_vector(1) <= t_wb_in.cyc;
-    s_state_machine_vector(2) <= t_wb_in.stb;
-    s_state_machine_vector(3) <= t_wb_in.we;
+    --s_state_machine_vector(0) <= s_rst_sys_n_i;
+    --s_state_machine_vector(1) <= t_wb_in.cyc;
+    --s_state_machine_vector(2) <= t_wb_in.stb;
+    --s_state_machine_vector(3) <= t_wb_in.we;
 
-    -- single read write cycle
-    p_wb_read_write: process(s_clk_sys_i)
+    -- p_wb_write: process(s_clk_sys_i)
+    -- begin
+    --     if rising_edge(s_clk_sys_i) then
+    --         if s_rst_sys_n_i = '0' then
+    --             s_led_state     <= '0';
+    --             s_stall_state   <= '0';
+    --         elsif t_wb_in.cyc = '1' and t_wb_in.stb = '1' and t_wb_in.we = '1' then
+    --             s_led_state <= t_wb_in.dat(0);
+    --             report("inside write: 1111");
+    --             report std_logic'image(t_wb_in.dat(0));
+    --         end if;
+    --     end if;
+    -- end process;
 
+    -- p_wb_read: process(s_clk_sys_i)
+    -- begin
+    --     if rising_edge(s_clk_sys_i) then
+    --         if s_rst_sys_n_i = '0' then
+    --             t_wb_out.dat    <= (others => '0');
+    --         elsif t_wb_in.cyc = '1' and t_wb_in.stb = '1' and t_wb_in.we = '0'then
+    --             t_wb_out.dat(0) <= s_led_state;
+    --             report("inside read: 0111");
+    --             report std_logic'image(s_led_state);
+    --         end if;
+    --     end if;
+    -- end process;
+
+    p_wb_ack: process(s_clk_sys_i)
     begin
-
-        if rising_edge(s_clk_sys_i) then --WHY IS THIS BREAKING EVERYTHING???
-
-        case s_state_machine_vector is
-
-                when mode_reset_0 | mode_reset_1 | mode_reset_2 | mode_reset_3 | mode_reset_4 | mode_reset_5 | mode_reset_6 =>
-
-                    -- RESET
-
-                    t_wb_out.dat    <= (others => '0');
-
-                    s_led_state     <= '0';
-                    s_stall_state   <= '0';
-
-                    report("reset");
-                    --report std_logic'image(s_rst_sys_n_i);
-                    --report std_logic'image(s_state_machine_vector(0));
-                    --report std_logic'image(mode_reset_0(0));
-
-                    --s_blinky_mode_v   <= (others => '0');
-                    --s_led_freq_ctl  <= '1';
-                    --s_count         <=  1;
-                    --s_compare_to    <=  15; --15000
-                    --end if; --rising_edge(s_clk_sys_i)
-
-                when mode_write =>
-
-                    
-                    s_led_state <= t_wb_in.dat(0);
-                    report("inside write: 1111");
-                    report std_logic'image(t_wb_in.dat(0));
-                    report std_logic'image(t_wb_in.dat(31));
-                    
-      
-                -- END WRITE
-
-                when mode_read =>
-
-                    t_wb_out.dat(0) <= s_led_state;
-                    report("inside read: 0111");
-          
-                -- END READ
-
-                when others => 
-                    --report("Fuck VHDL");
-                    --report std_logic'image(t_wb_in.cyc);
-                    --report std_logic'image(t_wb_in.dat(0));
-
-            end case;
-
+        if rising_edge(s_clk_sys_i) then
+            if s_rst_sys_n_i = '0' then
+                s_ack_state <= '0';
+            else
+                report("inside ack else");
+                report std_logic'image(t_wb_in.stb);
+                report std_logic'image(t_wb_in.cyc);
+                if t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
+                    report("inside ack -> 1");
+                    s_ack_state <= '1';
+                else
+                    s_ack_state <= '0';
+                end if;
+            end if;
         end if;
-
     end process;
             
 end blinky_arch;
