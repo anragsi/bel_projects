@@ -54,7 +54,7 @@ architecture blinky_arch of blinky is
 
     signal s_led_freq_ctl     : std_logic := '0';
     signal s_count            : integer   :=  1;
-    signal s_compare_to       : integer   :=  4;
+    signal s_compare_to       : integer   :=  30000000;
     signal s_freq_change_flag : std_logic := '0';
 
     signal  s_blinky_mode_v   : std_logic_vector(2 downto 0) := (others => '0');
@@ -105,19 +105,19 @@ begin
             elsif s_state_machine_vector = mode_write then
                 s_led_state <= t_wb_in.dat(0);
                 --s_blinky_mode_v(0) <= t_wb_in.dat(4 downto 1);
-                s_blinky_mode_v(0) <= t_wb_in.dat(1);
-                s_blinky_mode_v(1) <= t_wb_in.dat(2);
-                s_blinky_mode_v(2) <= t_wb_in.dat(3);
-                    case s_blinky_mode_v is
-                        when c_blinky_mode_A =>
-                            s_compare_to <= i_blinky_mode_A;
-                        when c_blinky_mode_B =>
-                            s_compare_to <= i_blinky_mode_B;
-                        when c_blinky_mode_C =>
-                            s_compare_to <= i_blinky_mode_C;
-                        when others =>
-                            s_compare_to <= i_blinky_mode_A;
-                    end case;
+                -- s_blinky_mode_v(0) <= t_wb_in.dat(1);
+                -- s_blinky_mode_v(1) <= t_wb_in.dat(2);
+                -- s_blinky_mode_v(2) <= t_wb_in.dat(3);
+                --     case s_blinky_mode_v is
+                --         when c_blinky_mode_A =>
+                --             s_compare_to <= i_blinky_mode_A;
+                --         when c_blinky_mode_B =>
+                --             s_compare_to <= i_blinky_mode_B;
+                --         when c_blinky_mode_C =>
+                --             s_compare_to <= i_blinky_mode_C;
+                --         when others =>
+                --             s_compare_to <= i_blinky_mode_A;
+                --     end case;
                 --report("inside write: 1111");
                 --report std_logic'image(t_wb_in.dat(0));
             end if;
