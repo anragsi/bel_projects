@@ -54,16 +54,19 @@ architecture blinky_arch of blinky is
 
     signal s_led_freq_ctl     : std_logic := '0';
     signal s_count            : integer   :=  1;
-    signal s_compare_to       : integer   :=  30000000;
+    signal s_compare_to       : integer   :=  1;
     signal s_freq_change_flag : std_logic := '0';
+    signal s_toggle           : boolean   := false;
 
     signal  s_blinky_mode_v   : std_logic_vector(2 downto 0) := (others => '0');
 
     constant c_blinky_mode_A  : std_logic_vector(2 downto 0) := "000";
     constant i_blinky_mode_A  : integer   :=  1;
-    constant c_blinky_mode_B  : std_logic_vector(2 downto 0) := "111";
+
+    constant c_blinky_mode_B  : std_logic_vector(2 downto 0) := "100";
     constant i_blinky_mode_B  : integer   :=  15000000;
-    constant c_blinky_mode_C  : std_logic_vector(2 downto 0) := "101";
+
+    constant c_blinky_mode_C  : std_logic_vector(2 downto 0) := "111";
     constant i_blinky_mode_C  : integer   :=  30000000;
 
     -- all vectors are downto-range positions are 3210
@@ -104,22 +107,21 @@ begin
                 s_retry_state   <= '0';
             elsif s_state_machine_vector = mode_write then
                 s_led_state <= t_wb_in.dat(0);
-                --s_blinky_mode_v(0) <= t_wb_in.dat(4 downto 1);
-                -- s_blinky_mode_v(0) <= t_wb_in.dat(1);
-                -- s_blinky_mode_v(1) <= t_wb_in.dat(2);
-                -- s_blinky_mode_v(2) <= t_wb_in.dat(3);
-                --     case s_blinky_mode_v is
-                --         when c_blinky_mode_A =>
-                --             s_compare_to <= i_blinky_mode_A;
-                --         when c_blinky_mode_B =>
-                --             s_compare_to <= i_blinky_mode_B;
-                --         when c_blinky_mode_C =>
-                --             s_compare_to <= i_blinky_mode_C;
-                --         when others =>
-                --             s_compare_to <= i_blinky_mode_A;
-                --     end case;
-                --report("inside write: 1111");
-                --report std_logic'image(t_wb_in.dat(0));
+                s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
+                case s_blinky_mode_v is
+                    when c_blinky_mode_A =>
+                        s_compare_to <= i_blinky_mode_A;
+                        s_toggle <= false;
+                    when c_blinky_mode_B =>
+                        s_compare_to <= i_blinky_mode_B;
+                        s_toggle <= true;
+                    when c_blinky_mode_C =>
+                        s_compare_to <= i_blinky_mode_C;
+                        s_toggle <= true;
+                    when others => --redundant
+                        s_compare_to <= i_blinky_mode_A;
+                        s_toggle <= false;
+                end case;
             end if;
         end if;
     end process;
@@ -131,8 +133,7 @@ begin
                 t_wb_out.dat    <= (others => '0');
             elsif s_state_machine_vector = mode_read then
                 t_wb_out.dat(0) <= s_led_state;
-                --report("inside read: 0111");
-                --report std_logic'image(s_led_state);
+                t_wb_out.dat(3 downto 1) <= s_blinky_mode_v;
             end if;
         end if;
     end process;
@@ -143,11 +144,7 @@ begin
             if s_rst_sys_n_i = '0' then
                 s_ack_state <= '0';
             else
-                --report("inside ack else");
-                --report std_logic'image(t_wb_in.stb);
-                --report std_logic'image(t_wb_in.cyc);
                 if t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
-                    --report("inside ack -> 1");
                     s_ack_state <= '1';
                 else
                     s_ack_state <= '0';
@@ -161,9 +158,12 @@ begin
         if rising_edge(s_clk_sys_i) then
             if s_rst_sys_n_i = '0' then
                 s_count <= 0;
-            elsif s_count = s_compare_to then
+            elsif s_count >= s_compare_to and s_toggle then
                 s_count <= 1;
                 s_led_freq_ctl <= not s_led_freq_ctl;
+            elsif not s_toggle then
+                s_led_freq_ctl <= '1'; 
+                s_count <= 1;
             else
                 s_count <= s_count + 1;
             end if;

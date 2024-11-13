@@ -38,8 +38,8 @@ architecture blinky_testbench_architecture of blinky_testbench is
   constant c_blinky_on    : std_logic_vector(31 downto 0) := ( 0 => '1', others => '0');
   --constant c_blinky_on    : std_logic_vector(31 downto 0) := ( others => '1');
   constant c_blinky_off   : std_logic_vector(31 downto 0) := ( others => '0');
-  constant c_blinky_B_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '1', 2 => '1', 3 => '1', others => '0');
-  constant c_blinky_C_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '1', 2 => '0', 3 => '1', others => '0');
+  constant c_blinky_B_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '0', 2 => '0', 3 => '1', others => '0');
+  constant c_blinky_C_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '1', 2 => '1', 3 => '1', others => '0');
   
   -- Basic device signals
   signal s_clk        : std_ulogic := '0';
@@ -133,6 +133,7 @@ function to_logic_to_int(x : std_logic) return natural is
             -- RESET active
             --
             s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off, c_blinky_off);
+            report("Testing Reset");
             wait until rising_edge(s_rst_n);
             -- RESET inactive
             --
@@ -140,8 +141,48 @@ function to_logic_to_int(x : std_logic) return natural is
             --
             wait until rising_edge(s_clk);
             s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_on);
+            report("Testing single write LED on");
             wait until rising_edge(s_clk);
-            s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off,c_blinky_off);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_off);
+            report("Testing single write LED off");
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_on);
+            report("Testing single write LED on");
+            --
+            -- test SINGLE WRITE END
+            --
+            -- test SINGLE READ
+            --
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_off, c_reg_all_zero);
+            report("Testing single read");
+            --
+            -- test SINGLE READ END
+            --
+            wait until rising_edge(s_clk);
+            wait until rising_edge(s_clk);
+            --
+            -- test SINGLE WRITE TURN PATTERN B 1 ON
+            --
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_B_on);
+            for i in 0 to 30 loop
+              wait until rising_edge(s_clk);
+              report("waited");
+            end loop; -- Waiter
+            wait until rising_edge(s_clk);
+            --
+            -- test SINGLE WRITE END
+            --
+            -- test SINGLE WRITE TURN PATTERN C ON
+            --
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_C_on);
+            for i in 0 to 60 loop
+              wait until rising_edge(s_clk);
+              report("waited");
+            end loop; -- Waiter
+            wait until rising_edge(s_clk);
             --
             -- test SINGLE WRITE END
             --
@@ -153,22 +194,6 @@ function to_logic_to_int(x : std_logic) return natural is
             s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off, c_reg_all_zero);
             --
             -- test SINGLE READ END
-            --
-            -- test SINGLE WRITE TURN PATTERN B 1 ON
-            --
-            wait until rising_edge(s_clk);
-            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_B_on);
-            wait until rising_edge(s_clk);
-            --
-            -- test SINGLE WRITE END
-            --
-            -- test SINGLE WRITE TURN PATTERN C ON
-            --
-            wait until rising_edge(s_clk);
-            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_C_on);
-            wait until rising_edge(s_clk);
-            --
-            -- test SINGLE WRITE END
             --
             -- test SINGLE WRITE TURN LED OFF
             --
