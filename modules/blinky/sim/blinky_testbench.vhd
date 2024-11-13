@@ -36,10 +36,11 @@ architecture blinky_testbench_architecture of blinky_testbench is
   constant c_we_off                      : std_logic := '0';
 
   constant c_blinky_on    : std_logic_vector(31 downto 0) := ( 0 => '1', others => '0');
-  --constant c_blinky_on    : std_logic_vector(31 downto 0) := ( others => '1');
   constant c_blinky_off   : std_logic_vector(31 downto 0) := ( others => '0');
   constant c_blinky_B_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '0', 2 => '0', 3 => '1', others => '0');
+  constant c_blinky_B_off : std_logic_vector(31 downto 0) := ( 0 => '0', 1 => '0', 2 => '0', 3 => '1', others => '0');
   constant c_blinky_C_on  : std_logic_vector(31 downto 0) := ( 0 => '1', 1 => '1', 2 => '1', 3 => '1', others => '0');
+  constant c_blinky_C_off : std_logic_vector(31 downto 0) := ( 0 => '0', 1 => '1', 2 => '1', 3 => '1', others => '0');
   
   -- Basic device signals
   signal s_clk        : std_ulogic := '0';
@@ -84,6 +85,10 @@ function to_logic_to_int(x : std_logic) return natural is
 
   component blinky is
 
+    generic (
+      g_simulation    : in boolean
+  );
+
     port(
     s_clk_sys_i       : in std_logic;
     s_rst_sys_n_i     : in std_logic;
@@ -99,6 +104,10 @@ function to_logic_to_int(x : std_logic) return natural is
   begin
 
     dut : blinky
+    generic map
+      (
+        g_simulation  => true
+      )
       port map (
         s_clk_sys_i     => s_clk,
         s_rst_sys_n_i   => s_rst_n,
@@ -194,6 +203,34 @@ function to_logic_to_int(x : std_logic) return natural is
             s_wb_master_out  <= wb_stim(c_cyc_off, c_str_off, c_we_off, c_reg_all_zero);
             --
             -- test SINGLE READ END
+            --
+            -- test SINGLE WRITE TURN PATTERN B OFF to C ON
+            --
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_off);
+            report("set c_blinky_off");
+            for i in 0 to 30 loop 
+              wait until rising_edge(s_clk);
+              report("waited");
+            end loop; -- Waiter
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_B_off);
+            report("set c_blinky_B_off");
+            for i in 0 to 30 loop 
+              wait until rising_edge(s_clk);
+              report("waited");
+            end loop; -- Waiter
+            wait until rising_edge(s_clk);
+            wait until rising_edge(s_clk);
+            s_wb_master_out  <= wb_stim(c_cyc_on, c_str_on, c_we_on, c_blinky_C_on);
+            report("set c_blinky_C_on");
+            for i in 0 to 30 loop
+              wait until rising_edge(s_clk);
+              report("waited");
+            end loop; -- Waiter
+            wait until rising_edge(s_clk);
+            --
+            -- test SINGLE WRITE END
             --
             -- test SINGLE WRITE TURN LED OFF
             --

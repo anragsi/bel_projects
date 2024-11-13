@@ -8,6 +8,11 @@ use work.wishbone_pkg.all;
 
 entity blinky is
 
+
+    generic (
+        g_simulation    : in boolean := false
+    );
+
     port(
     
     -- these two sys signals come from SysCon
@@ -61,13 +66,13 @@ architecture blinky_arch of blinky is
     signal  s_blinky_mode_v   : std_logic_vector(2 downto 0) := (others => '0');
 
     constant c_blinky_mode_A  : std_logic_vector(2 downto 0) := "000";
-    constant i_blinky_mode_A  : integer   :=  1;
+    signal   i_blinky_mode_A  : integer   :=  1;
 
     constant c_blinky_mode_B  : std_logic_vector(2 downto 0) := "100";
-    constant i_blinky_mode_B  : integer   :=  15000000;
+    signal   i_blinky_mode_B  : integer   :=  15000000;
 
     constant c_blinky_mode_C  : std_logic_vector(2 downto 0) := "111";
-    constant i_blinky_mode_C  : integer   :=  30000000;
+    signal   i_blinky_mode_C  : integer   :=  30000000;
 
     -- all vectors are downto-range positions are 3210
     constant mode_write   : std_logic_vector(3 downto 0) := "1111";
@@ -82,7 +87,14 @@ architecture blinky_arch of blinky is
     constant mode_reset_6 : std_logic_vector(3 downto 0) := "1110";
 
 begin
-  
+
+    -- change values if in a simulation
+    g_set_sim_values : if g_simulation generate
+        i_blinky_mode_B <=  10;
+        i_blinky_mode_C <=  20;
+    end generate g_set_sim_values;
+ 
+
     --  for now no errors, no stalling
     t_wb_out.err    <= s_error_state;
     t_wb_out.stall  <= s_stall_state;
