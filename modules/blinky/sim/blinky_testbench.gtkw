@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
-[*] Wed Nov 13 15:49:38 2024
+[*] Thu Nov 14 16:30:20 2024
 [*]
 [dumpfile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.ghw"
-[dumpfile_mtime] "Wed Nov 13 15:47:17 2024"
-[dumpfile_size] 1008001
+[dumpfile_mtime] "Thu Nov 14 16:28:46 2024"
+[dumpfile_size] 1144070
 [savefile] "/home/agr/dev/bel_projects/modules/blinky/sim/blinky_testbench.gtkw"
-[timestart] 2663500000
+[timestart] 527100000
 [size] 1920 1032
 [pos] -1 -1
-*-27.198469 3224000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-26.598469 244800000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.blinky_testbench.
 [treeopen] top.blinky_testbench.dut.
@@ -32,17 +32,18 @@ top.blinky_testbench.dut.s_stall_state
 top.blinky_testbench.dut.t_wb_in.cyc
 top.blinky_testbench.dut.t_wb_in.stb
 top.blinky_testbench.dut.t_wb_out.ack
+top.blinky_testbench.dut.t_wb_in.we
 @22
 #{top.blinky_testbench.s_wb_master_out.dat[31:0]} top.blinky_testbench.s_wb_master_out.dat[31] top.blinky_testbench.s_wb_master_out.dat[30] top.blinky_testbench.s_wb_master_out.dat[29] top.blinky_testbench.s_wb_master_out.dat[28] top.blinky_testbench.s_wb_master_out.dat[27] top.blinky_testbench.s_wb_master_out.dat[26] top.blinky_testbench.s_wb_master_out.dat[25] top.blinky_testbench.s_wb_master_out.dat[24] top.blinky_testbench.s_wb_master_out.dat[23] top.blinky_testbench.s_wb_master_out.dat[22] top.blinky_testbench.s_wb_master_out.dat[21] top.blinky_testbench.s_wb_master_out.dat[20] top.blinky_testbench.s_wb_master_out.dat[19] top.blinky_testbench.s_wb_master_out.dat[18] top.blinky_testbench.s_wb_master_out.dat[17] top.blinky_testbench.s_wb_master_out.dat[16] top.blinky_testbench.s_wb_master_out.dat[15] top.blinky_testbench.s_wb_master_out.dat[14] top.blinky_testbench.s_wb_master_out.dat[13] top.blinky_testbench.s_wb_master_out.dat[12] top.blinky_testbench.s_wb_master_out.dat[11] top.blinky_testbench.s_wb_master_out.dat[10] top.blinky_testbench.s_wb_master_out.dat[9] top.blinky_testbench.s_wb_master_out.dat[8] top.blinky_testbench.s_wb_master_out.dat[7] top.blinky_testbench.s_wb_master_out.dat[6] top.blinky_testbench.s_wb_master_out.dat[5] top.blinky_testbench.s_wb_master_out.dat[4] top.blinky_testbench.s_wb_master_out.dat[3] top.blinky_testbench.s_wb_master_out.dat[2] top.blinky_testbench.s_wb_master_out.dat[1] top.blinky_testbench.s_wb_master_out.dat[0]
 #{top.blinky_testbench.s_wb_master_in.dat[31:0]} top.blinky_testbench.s_wb_master_in.dat[31] top.blinky_testbench.s_wb_master_in.dat[30] top.blinky_testbench.s_wb_master_in.dat[29] top.blinky_testbench.s_wb_master_in.dat[28] top.blinky_testbench.s_wb_master_in.dat[27] top.blinky_testbench.s_wb_master_in.dat[26] top.blinky_testbench.s_wb_master_in.dat[25] top.blinky_testbench.s_wb_master_in.dat[24] top.blinky_testbench.s_wb_master_in.dat[23] top.blinky_testbench.s_wb_master_in.dat[22] top.blinky_testbench.s_wb_master_in.dat[21] top.blinky_testbench.s_wb_master_in.dat[20] top.blinky_testbench.s_wb_master_in.dat[19] top.blinky_testbench.s_wb_master_in.dat[18] top.blinky_testbench.s_wb_master_in.dat[17] top.blinky_testbench.s_wb_master_in.dat[16] top.blinky_testbench.s_wb_master_in.dat[15] top.blinky_testbench.s_wb_master_in.dat[14] top.blinky_testbench.s_wb_master_in.dat[13] top.blinky_testbench.s_wb_master_in.dat[12] top.blinky_testbench.s_wb_master_in.dat[11] top.blinky_testbench.s_wb_master_in.dat[10] top.blinky_testbench.s_wb_master_in.dat[9] top.blinky_testbench.s_wb_master_in.dat[8] top.blinky_testbench.s_wb_master_in.dat[7] top.blinky_testbench.s_wb_master_in.dat[6] top.blinky_testbench.s_wb_master_in.dat[5] top.blinky_testbench.s_wb_master_in.dat[4] top.blinky_testbench.s_wb_master_in.dat[3] top.blinky_testbench.s_wb_master_in.dat[2] top.blinky_testbench.s_wb_master_in.dat[1] top.blinky_testbench.s_wb_master_in.dat[0]
 @28
-top.blinky_testbench.dut.s_led_o
 top.blinky_testbench.dut.s_led_state
-@420
-top.blinky_testbench.dut.s_compare_to
-@421
-top.blinky_testbench.dut.s_count
+top.blinky_testbench.dut.s_led_o
+top.blinky_testbench.dut.s_blinky_mode_b_toggle
+@29
+top.blinky_testbench.dut.s_blinky_mode_c_toggle
 @28
 top.blinky_testbench.dut.s_led_freq_ctl
+#{top.blinky_testbench.dut.s_blinky_mode_v[2:0]} top.blinky_testbench.dut.s_blinky_mode_v[2] top.blinky_testbench.dut.s_blinky_mode_v[1] top.blinky_testbench.dut.s_blinky_mode_v[0]
 [pattern_trace] 1
 [pattern_trace] 0

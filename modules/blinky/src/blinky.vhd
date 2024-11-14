@@ -57,34 +57,29 @@ architecture blinky_arch of blinky is
 
     signal s_state_machine_vector : std_logic_vector(3 downto 0) := "0000";
 
-    signal s_led_freq_ctl     : std_logic := '0';
-    signal s_count            : integer   :=  1;
-    signal s_compare_to       : integer   :=  1;
-    signal s_freq_change_flag : std_logic := '0';
-    signal s_toggle           : boolean   := false;
+    signal s_led_freq_ctl   : std_logic := '0';
 
     signal  s_blinky_mode_v   : std_logic_vector(2 downto 0) := (others => '0');
 
-    constant c_blinky_mode_A  : std_logic_vector(2 downto 0) := "000";
-    signal   i_blinky_mode_A  : integer   :=  1;
+    -- LED static on
+    constant c_blinky_mode_A        : std_logic_vector(2 downto 0) := "000";
+    constant s_blinky_mode_A_toggle : std_logic := '1';
 
-    constant c_blinky_mode_B  : std_logic_vector(2 downto 0) := "100";
-    signal   i_blinky_mode_B  : integer   :=  15000000;
+    -- LED blinking
+    constant c_blinky_mode_B        : std_logic_vector(2 downto 0) := "100";
+    signal   i_blinky_mode_B        : integer   :=  40000000;
+    signal   s_counter_B            : integer   :=  1;
+    signal   s_blinky_mode_B_toggle : std_logic := '0';
 
-    constant c_blinky_mode_C  : std_logic_vector(2 downto 0) := "111";
-    signal   i_blinky_mode_C  : integer   :=  30000000;
+    -- LED blinking
+    constant c_blinky_mode_C        : std_logic_vector(2 downto 0) := "111";
+    signal   i_blinky_mode_C        : integer   :=  10000000;
+    signal   s_counter_C            : integer   :=  1;
+    signal   s_blinky_mode_C_toggle : std_logic := '0';
 
     -- all vectors are downto-range positions are 3210
     constant mode_write   : std_logic_vector(3 downto 0) := "1111";
     constant mode_read    : std_logic_vector(3 downto 0) := "0111";
-
-    constant mode_reset_0 : std_logic_vector(3 downto 0) := "0000";
-    constant mode_reset_1 : std_logic_vector(3 downto 0) := "0010";
-    constant mode_reset_2 : std_logic_vector(3 downto 0) := "0100";
-    constant mode_reset_3 : std_logic_vector(3 downto 0) := "0110";
-    constant mode_reset_4 : std_logic_vector(3 downto 0) := "1000";
-    constant mode_reset_5 : std_logic_vector(3 downto 0) := "1010";
-    constant mode_reset_6 : std_logic_vector(3 downto 0) := "1110";
 
 begin
 
@@ -122,17 +117,17 @@ begin
                 s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
                 case s_blinky_mode_v is
                     when c_blinky_mode_A =>
-                        s_compare_to <= i_blinky_mode_A;
-                        s_toggle <= false;
+                        s_led_freq_ctl <= s_blinky_mode_A_toggle;
+                        report("s_led_freq_ctl <= s_blinky_mode_A_toggle");
                     when c_blinky_mode_B =>
-                        s_compare_to <= i_blinky_mode_B;
-                        s_toggle <= true;
+                        s_led_freq_ctl <= s_blinky_mode_B_toggle;
+                        report("s_led_freq_ctl <= s_blinky_mode_B_toggle");
                     when c_blinky_mode_C =>
-                        s_compare_to <= i_blinky_mode_C;
-                        s_toggle <= true;
-                    when others => --redundant
-                        s_compare_to <= i_blinky_mode_A;
-                        s_toggle <= false;
+                        s_led_freq_ctl <= s_blinky_mode_C_toggle;
+                        report("s_led_freq_ctl <= s_blinky_mode_C_toggle");
+                    when others => -- unrecognised turns LED off
+                        s_led_freq_ctl <= '0';
+                        s_error_state <= '1';
                 end case;
             end if;
         end if;
@@ -165,21 +160,32 @@ begin
         end if;
     end process;
 
-    p_blinky_counter: process(s_clk_sys_i)
+    p_blinky_counter_B: process(s_clk_sys_i)
     begin
         if rising_edge(s_clk_sys_i) then
             if s_rst_sys_n_i = '0' then
-                s_count <= 0;
-            elsif s_count >= s_compare_to and s_toggle then
-                s_count <= 1;
-                s_led_freq_ctl <= not s_led_freq_ctl;
-            elsif not s_toggle then
-                s_led_freq_ctl <= '1'; 
-                s_count <= 1;
+                s_counter_B <= 0;
+            elsif s_counter_B = i_blinky_mode_B then
+                s_counter_B <= 0;
+                s_blinky_mode_B_toggle <= not s_blinky_mode_B_toggle;
             else
-                s_count <= s_count + 1;
+                s_counter_B <= s_counter_B + 1;
             end if;
         end if;
     end process;
-            
+
+    p_blinky_counter_C: process(s_clk_sys_i)
+    begin
+        if rising_edge(s_clk_sys_i) then
+            if s_rst_sys_n_i = '0' then
+                s_counter_C <= 0;
+            elsif s_counter_C = i_blinky_mode_C then
+                s_counter_C <= 0;
+                s_blinky_mode_C_toggle <= not s_blinky_mode_C_toggle;
+            else
+                s_counter_C <= s_counter_C + 1;
+            end if;
+        end if;
+    end process;
+
 end blinky_arch;
