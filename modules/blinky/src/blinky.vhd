@@ -59,20 +59,20 @@ architecture blinky_arch of blinky is
 
     signal s_led_freq_ctl   : std_logic := '0';
 
-    signal  s_blinky_mode_v   : std_logic_vector(2 downto 0) := (others => '0');
+    signal  s_blinky_mode_v   : std_logic_vector(1 downto 0) := (others => '0');
 
     -- LED static on
-    constant c_blinky_mode_A        : std_logic_vector(2 downto 0) := "000";
+    constant c_blinky_mode_A        : std_logic_vector(1 downto 0) := "00";
     constant s_blinky_mode_A_toggle : std_logic := '1';
 
     -- LED blinking
-    constant c_blinky_mode_B        : std_logic_vector(2 downto 0) := "100";
+    constant c_blinky_mode_B        : std_logic_vector(1 downto 0) := "10";
     signal   i_blinky_mode_B        : integer   :=  40000000;
     signal   s_counter_B            : integer   :=  1;
     signal   s_blinky_mode_B_toggle : std_logic := '0';
 
     -- LED blinking
-    constant c_blinky_mode_C        : std_logic_vector(2 downto 0) := "111";
+    constant c_blinky_mode_C        : std_logic_vector(1 downto 0) := "11";
     signal   i_blinky_mode_C        : integer   :=  10000000;
     signal   s_counter_C            : integer   :=  1;
     signal   s_blinky_mode_C_toggle : std_logic := '0';
@@ -112,23 +112,10 @@ begin
                 s_stall_state   <= '0';
                 s_error_state   <= '0';
                 s_retry_state   <= '0';
+                s_blinky_mode_v <= (others => '0');
             elsif s_state_machine_vector = mode_write then
                 s_led_state <= t_wb_in.dat(0);
-                s_blinky_mode_v <= t_wb_in.dat(3 downto 1);
-                case s_blinky_mode_v is
-                    when c_blinky_mode_A =>
-                        s_led_freq_ctl <= s_blinky_mode_A_toggle;
-                        report("s_led_freq_ctl <= s_blinky_mode_A_toggle");
-                    when c_blinky_mode_B =>
-                        s_led_freq_ctl <= s_blinky_mode_B_toggle;
-                        report("s_led_freq_ctl <= s_blinky_mode_B_toggle");
-                    when c_blinky_mode_C =>
-                        s_led_freq_ctl <= s_blinky_mode_C_toggle;
-                        report("s_led_freq_ctl <= s_blinky_mode_C_toggle");
-                    when others => -- unrecognised turns LED off
-                        s_led_freq_ctl <= '0';
-                        s_error_state <= '1';
-                end case;
+                s_blinky_mode_v <= t_wb_in.dat(2 downto 1);
             end if;
         end if;
     end process;
@@ -140,7 +127,7 @@ begin
                 t_wb_out.dat    <= (others => '0');
             elsif s_state_machine_vector = mode_read then
                 t_wb_out.dat(0) <= s_led_state;
-                t_wb_out.dat(3 downto 1) <= s_blinky_mode_v;
+                t_wb_out.dat(2 downto 1) <= s_blinky_mode_v;
             end if;
         end if;
     end process;
@@ -151,7 +138,7 @@ begin
             if s_rst_sys_n_i = '0' then
                 s_ack_state <= '0';
             else
-                if t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
+                if s_ack_state = '0' and t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
                     s_ack_state <= '1';
                 else
                     s_ack_state <= '0';
@@ -187,5 +174,10 @@ begin
             end if;
         end if;
     end process;
+
+    s_led_freq_ctl <=   s_blinky_mode_A_toggle when s_blinky_mode_v = c_blinky_mode_A else
+                        s_blinky_mode_B_toggle when s_blinky_mode_v = c_blinky_mode_B else
+                        s_blinky_mode_C_toggle when s_blinky_mode_v = c_blinky_mode_C else
+                        '1' when s_rst_sys_n_i = '0';
 
 end blinky_arch;
