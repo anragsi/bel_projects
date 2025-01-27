@@ -83,6 +83,46 @@ architecture pwm_arch of pwm is
     --constant mode_read    : std_logic_vector(3 downto 0) := "0111";
 
 begin
+    PWM : entity work.simple_pwm_wb
+    port map (
+        rst_n_i     =>  s_clk_sys_i,
+        clk_sys_i   =>  s_rst_sys_n_i,
+        wb_adr_i    =>  --,
+        wb_dat_i    =>  t_wb_in.dat,                            
+        wb_dat_o    =>  t_wb_out.dat,                                 
+        wb_cyc_i    =>  t_wb_in.cyc,                    
+        wb_sel_i    =>  t_wb_in.sel, 
+        wb_stb_i    =>  t_wb_in.stb,       
+        wb_we_i     =>  t_wb_in.we,             
+        wb_ack_o    =>  t_wb_out.ack, 
+        wb_stall_o  =>  t_wb_in.stall, 
+        regs_i      =>  t_wb_in.cyc,                  
+        regs_o      => 
+    );
+
+    --rst_n_i                                  : in     std_logic;
+    --clk_sys_i                                : in     std_logic;
+    --dtor(3 downto 0);
+    --wb_dat_i                                 : in     std_logic_vector(31 downto 0);
+    --wb_dat_o                                 : out    std_logic_vector(31 downto 0);
+    --wb_cyc_i                                 : in     std_logic;
+    --wb_sel_i                                 : in     std_logic_vector(3 downto 0);
+    --wb_stb_i                                 : in     std_logic;
+    --wb_we_i                                  : in     std_logic;
+    --wb_ack_o                                 : out    std_logic;
+    --wb_stall_o                               : out    std_logic;
+    --regs_i                                   : in     t_spwm_in_registers;
+    --regs_o                                   : out    t_spwm_out_registers
+
+    --blinky_blink : blinky
+    --port map (
+    --      EXT ENT => HERE
+    --    s_clk_sys_i     => clk_sys,
+    --    s_rst_sys_n_i   => rstn_sys,
+    --    t_wb_out        => dev_bus_master_i(dev_slaves'pos(devs_blinky)),
+    --    t_wb_in         => dev_bus_master_o(dev_slaves'pos(devs_blinky)),
+    --    s_led_o         => blinky_led_o);
+    --end generate;
 
     ---- change values if in a simulation
     --g_set_sim_values : if g_simulation generate
