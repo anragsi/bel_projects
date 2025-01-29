@@ -1,0 +1,40 @@
+[*]
+[*] GTKWave Analyzer v3.3.116 (w)1999-2023 BSI
+[*] Wed Jan 29 13:37:51 2025
+[*]
+[dumpfile] "/home/agr/dev/bel_projects/modules/pwm/sim/pwm_testbench.ghw"
+[dumpfile_mtime] "Wed Jan 29 13:32:00 2025"
+[dumpfile_size] 8751334
+[savefile] "/home/agr/dev/bel_projects/modules/pwm/sim/pwm_testbench.gtkw"
+[timestart] 0
+[size] 2560 1392
+[pos] -2561 -1
+*-26.400000 340400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.pwm_testbench.
+[treeopen] top.pwm_testbench.dut.
+[treeopen] top.pwm_testbench.dut.t_wb_in.
+[treeopen] top.pwm_testbench.dut.t_wb_out.
+[treeopen] top.pwm_testbench.s_wb_master_in.
+[treeopen] top.pwm_testbench.s_wb_master_out.
+[sst_width] 209
+[signals_width] 134
+[sst_expanded] 1
+[sst_vpaned_height] 429
+@28
+top.pwm_testbench.dut.s_rst_sys_n_i
+top.pwm_testbench.dut.s_clk_sys_i
+top.pwm_testbench.s_wb_master_out.cyc
+top.pwm_testbench.s_wb_master_out.stb
+top.pwm_testbench.s_wb_master_out.we
+@22
+#{top.pwm_testbench.s_wb_master_out.adr[31:0]} top.pwm_testbench.s_wb_master_out.adr[31] top.pwm_testbench.s_wb_master_out.adr[30] top.pwm_testbench.s_wb_master_out.adr[29] top.pwm_testbench.s_wb_master_out.adr[28] top.pwm_testbench.s_wb_master_out.adr[27] top.pwm_testbench.s_wb_master_out.adr[26] top.pwm_testbench.s_wb_master_out.adr[25] top.pwm_testbench.s_wb_master_out.adr[24] top.pwm_testbench.s_wb_master_out.adr[23] top.pwm_testbench.s_wb_master_out.adr[22] top.pwm_testbench.s_wb_master_out.adr[21] top.pwm_testbench.s_wb_master_out.adr[20] top.pwm_testbench.s_wb_master_out.adr[19] top.pwm_testbench.s_wb_master_out.adr[18] top.pwm_testbench.s_wb_master_out.adr[17] top.pwm_testbench.s_wb_master_out.adr[16] top.pwm_testbench.s_wb_master_out.adr[15] top.pwm_testbench.s_wb_master_out.adr[14] top.pwm_testbench.s_wb_master_out.adr[13] top.pwm_testbench.s_wb_master_out.adr[12] top.pwm_testbench.s_wb_master_out.adr[11] top.pwm_testbench.s_wb_master_out.adr[10] top.pwm_testbench.s_wb_master_out.adr[9] top.pwm_testbench.s_wb_master_out.adr[8] top.pwm_testbench.s_wb_master_out.adr[7] top.pwm_testbench.s_wb_master_out.adr[6] top.pwm_testbench.s_wb_master_out.adr[5] top.pwm_testbench.s_wb_master_out.adr[4] top.pwm_testbench.s_wb_master_out.adr[3] top.pwm_testbench.s_wb_master_out.adr[2] top.pwm_testbench.s_wb_master_out.adr[1] top.pwm_testbench.s_wb_master_out.adr[0]
+#{top.pwm_testbench.s_wb_master_out.dat[31:0]} top.pwm_testbench.s_wb_master_out.dat[31] top.pwm_testbench.s_wb_master_out.dat[30] top.pwm_testbench.s_wb_master_out.dat[29] top.pwm_testbench.s_wb_master_out.dat[28] top.pwm_testbench.s_wb_master_out.dat[27] top.pwm_testbench.s_wb_master_out.dat[26] top.pwm_testbench.s_wb_master_out.dat[25] top.pwm_testbench.s_wb_master_out.dat[24] top.pwm_testbench.s_wb_master_out.dat[23] top.pwm_testbench.s_wb_master_out.dat[22] top.pwm_testbench.s_wb_master_out.dat[21] top.pwm_testbench.s_wb_master_out.dat[20] top.pwm_testbench.s_wb_master_out.dat[19] top.pwm_testbench.s_wb_master_out.dat[18] top.pwm_testbench.s_wb_master_out.dat[17] top.pwm_testbench.s_wb_master_out.dat[16] top.pwm_testbench.s_wb_master_out.dat[15] top.pwm_testbench.s_wb_master_out.dat[14] top.pwm_testbench.s_wb_master_out.dat[13] top.pwm_testbench.s_wb_master_out.dat[12] top.pwm_testbench.s_wb_master_out.dat[11] top.pwm_testbench.s_wb_master_out.dat[10] top.pwm_testbench.s_wb_master_out.dat[9] top.pwm_testbench.s_wb_master_out.dat[8] top.pwm_testbench.s_wb_master_out.dat[7] top.pwm_testbench.s_wb_master_out.dat[6] top.pwm_testbench.s_wb_master_out.dat[5] top.pwm_testbench.s_wb_master_out.dat[4] top.pwm_testbench.s_wb_master_out.dat[3] top.pwm_testbench.s_wb_master_out.dat[2] top.pwm_testbench.s_wb_master_out.dat[1] top.pwm_testbench.s_wb_master_out.dat[0]
+#{top.pwm_testbench.dut.t_wb_in.dat[31:0]} top.pwm_testbench.dut.t_wb_in.dat[31] top.pwm_testbench.dut.t_wb_in.dat[30] top.pwm_testbench.dut.t_wb_in.dat[29] top.pwm_testbench.dut.t_wb_in.dat[28] top.pwm_testbench.dut.t_wb_in.dat[27] top.pwm_testbench.dut.t_wb_in.dat[26] top.pwm_testbench.dut.t_wb_in.dat[25] top.pwm_testbench.dut.t_wb_in.dat[24] top.pwm_testbench.dut.t_wb_in.dat[23] top.pwm_testbench.dut.t_wb_in.dat[22] top.pwm_testbench.dut.t_wb_in.dat[21] top.pwm_testbench.dut.t_wb_in.dat[20] top.pwm_testbench.dut.t_wb_in.dat[19] top.pwm_testbench.dut.t_wb_in.dat[18] top.pwm_testbench.dut.t_wb_in.dat[17] top.pwm_testbench.dut.t_wb_in.dat[16] top.pwm_testbench.dut.t_wb_in.dat[15] top.pwm_testbench.dut.t_wb_in.dat[14] top.pwm_testbench.dut.t_wb_in.dat[13] top.pwm_testbench.dut.t_wb_in.dat[12] top.pwm_testbench.dut.t_wb_in.dat[11] top.pwm_testbench.dut.t_wb_in.dat[10] top.pwm_testbench.dut.t_wb_in.dat[9] top.pwm_testbench.dut.t_wb_in.dat[8] top.pwm_testbench.dut.t_wb_in.dat[7] top.pwm_testbench.dut.t_wb_in.dat[6] top.pwm_testbench.dut.t_wb_in.dat[5] top.pwm_testbench.dut.t_wb_in.dat[4] top.pwm_testbench.dut.t_wb_in.dat[3] top.pwm_testbench.dut.t_wb_in.dat[2] top.pwm_testbench.dut.t_wb_in.dat[1] top.pwm_testbench.dut.t_wb_in.dat[0]
+#{top.pwm_testbench.dut.t_wb_in.sel[3:0]} top.pwm_testbench.dut.t_wb_in.sel[3] top.pwm_testbench.dut.t_wb_in.sel[2] top.pwm_testbench.dut.t_wb_in.sel[1] top.pwm_testbench.dut.t_wb_in.sel[0]
+@23
+#{top.pwm_testbench.dut.t_wb_in.adr[31:0]} top.pwm_testbench.dut.t_wb_in.adr[31] top.pwm_testbench.dut.t_wb_in.adr[30] top.pwm_testbench.dut.t_wb_in.adr[29] top.pwm_testbench.dut.t_wb_in.adr[28] top.pwm_testbench.dut.t_wb_in.adr[27] top.pwm_testbench.dut.t_wb_in.adr[26] top.pwm_testbench.dut.t_wb_in.adr[25] top.pwm_testbench.dut.t_wb_in.adr[24] top.pwm_testbench.dut.t_wb_in.adr[23] top.pwm_testbench.dut.t_wb_in.adr[22] top.pwm_testbench.dut.t_wb_in.adr[21] top.pwm_testbench.dut.t_wb_in.adr[20] top.pwm_testbench.dut.t_wb_in.adr[19] top.pwm_testbench.dut.t_wb_in.adr[18] top.pwm_testbench.dut.t_wb_in.adr[17] top.pwm_testbench.dut.t_wb_in.adr[16] top.pwm_testbench.dut.t_wb_in.adr[15] top.pwm_testbench.dut.t_wb_in.adr[14] top.pwm_testbench.dut.t_wb_in.adr[13] top.pwm_testbench.dut.t_wb_in.adr[12] top.pwm_testbench.dut.t_wb_in.adr[11] top.pwm_testbench.dut.t_wb_in.adr[10] top.pwm_testbench.dut.t_wb_in.adr[9] top.pwm_testbench.dut.t_wb_in.adr[8] top.pwm_testbench.dut.t_wb_in.adr[7] top.pwm_testbench.dut.t_wb_in.adr[6] top.pwm_testbench.dut.t_wb_in.adr[5] top.pwm_testbench.dut.t_wb_in.adr[4] top.pwm_testbench.dut.t_wb_in.adr[3] top.pwm_testbench.dut.t_wb_in.adr[2] top.pwm_testbench.dut.t_wb_in.adr[1] top.pwm_testbench.dut.t_wb_in.adr[0]
+@28
+top.pwm_testbench.dut.t_wb_out.ack
+[pattern_trace] 1
+[pattern_trace] 0

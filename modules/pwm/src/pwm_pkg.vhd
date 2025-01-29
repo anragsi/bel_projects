@@ -21,7 +21,7 @@ package pwm_pkg is
     device_id     => x"434E5452",
     version       => x"00000001",
     date          => x"20250125",
-    name          => "GSI:PWM")));
+    name          => "GSI:PWMPWMPWMPWMPWM")));
 
   component blinky is
 

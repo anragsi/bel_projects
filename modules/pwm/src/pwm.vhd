@@ -4,13 +4,15 @@ use ieee.numeric_std.all;
 
 library work;
 use work.wishbone_pkg.all;
-
+use work.spwm_wbgen2_pkg.all; 
 
 entity pwm is
 
 
     generic (
-        g_simulation    : in boolean := false
+        g_simulation                : in boolean := false;
+        g_pwm_channel_num           : integer range 1 to 8 := 1;
+        g_pwm_interface_mode        : t_wishbone_interface_mode      := CLASSIC
     );
 
     port(
@@ -41,184 +43,39 @@ entity pwm is
         --end record t_wishbone_slave_in;
         -- equal to t_wishbone_master_out
 
-    s_pwm_o           : out std_logic
-        -- start with only one channel
+    s_pwm_o           : out std_logic_vector(g_pwm_channel_num-1 downto 0)
+    -- start with only one channel
     );
 
 end entity;
 
 architecture pwm_arch of pwm is
 
-    --signal s_ack_state        : std_logic := '0';
-    --signal s_led_state        : std_logic := '0';
-
-    --signal s_stall_state      : std_logic := '0';
-    --signal s_retry_state      : std_logic := '0';
-    --signal s_error_state      : std_logic := '0';
-
-    --signal s_state_machine_vector : std_logic_vector(3 downto 0) := "0000";
-
-    --signal s_led_freq_ctl   : std_logic := '0';
-
-    --signal  s_blinky_mode_v   : std_logic_vector(1 downto 0) := (others => '0');
-
-    ---- LED static on
-    --constant c_blinky_mode_A        : std_logic_vector(1 downto 0) := "00";
-    --constant s_blinky_mode_A_toggle : std_logic := '1';
-
-    ---- LED blinking
-    --constant c_blinky_mode_B        : std_logic_vector(1 downto 0) := "10";
-    --signal   i_blinky_mode_B        : integer   :=  40000000;
-    --signal   s_counter_B            : integer   :=  1;
-    --signal   s_blinky_mode_B_toggle : std_logic := '0';
-
-    ---- LED blinking
-    --constant c_blinky_mode_C        : std_logic_vector(1 downto 0) := "11";
-    --signal   i_blinky_mode_C        : integer   :=  10000000;
-    --signal   s_counter_C            : integer   :=  1;
-    --signal   s_blinky_mode_C_toggle : std_logic := '0';
-
-    ---- all vectors are downto-range positions are 3210
-    --constant mode_write   : std_logic_vector(3 downto 0) := "1111";
-    --constant mode_read    : std_logic_vector(3 downto 0) := "0111";
+    signal s_tb_pwm_o : std_logic;
 
 begin
-    PWM : entity work.simple_pwm_wb
+
+    PWM_WB : wb_simple_pwm
+    generic map(
+        g_num_channels          =>  g_pwm_channel_num,
+        g_interface_mode        =>  g_pwm_interface_mode
+    )
     port map (
-        rst_n_i     =>  s_clk_sys_i,
-        clk_sys_i   =>  s_rst_sys_n_i,
-        wb_adr_i    =>  --,
-        wb_dat_i    =>  t_wb_in.dat,                            
-        wb_dat_o    =>  t_wb_out.dat,                                 
-        wb_cyc_i    =>  t_wb_in.cyc,                    
-        wb_sel_i    =>  t_wb_in.sel, 
-        wb_stb_i    =>  t_wb_in.stb,       
-        wb_we_i     =>  t_wb_in.we,             
-        wb_ack_o    =>  t_wb_out.ack, 
-        wb_stall_o  =>  t_wb_in.stall, 
-        regs_i      =>  t_wb_in.cyc,                  
-        regs_o      => 
+        rst_n_i     =>  s_rst_sys_n_i,
+        clk_sys_i   =>  s_clk_sys_i,
+
+        wb_adr_i    => t_wb_in.adr(5 downto 0),
+        wb_dat_i    => t_wb_in.dat,    
+        wb_dat_o    => t_wb_out.dat,
+        wb_cyc_i    => t_wb_in.cyc,
+        wb_sel_i    => t_wb_in.sel,
+        wb_stb_i    => t_wb_in.stb,
+        wb_we_i     => t_wb_in.we,
+        wb_ack_o    => t_wb_out.ack,
+        wb_stall_o  => t_wb_out.stall,
+
+        pwm_o       =>  s_pwm_o
+
     );
-
-    --rst_n_i                                  : in     std_logic;
-    --clk_sys_i                                : in     std_logic;
-    --dtor(3 downto 0);
-    --wb_dat_i                                 : in     std_logic_vector(31 downto 0);
-    --wb_dat_o                                 : out    std_logic_vector(31 downto 0);
-    --wb_cyc_i                                 : in     std_logic;
-    --wb_sel_i                                 : in     std_logic_vector(3 downto 0);
-    --wb_stb_i                                 : in     std_logic;
-    --wb_we_i                                  : in     std_logic;
-    --wb_ack_o                                 : out    std_logic;
-    --wb_stall_o                               : out    std_logic;
-    --regs_i                                   : in     t_spwm_in_registers;
-    --regs_o                                   : out    t_spwm_out_registers
-
-    --blinky_blink : blinky
-    --port map (
-    --      EXT ENT => HERE
-    --    s_clk_sys_i     => clk_sys,
-    --    s_rst_sys_n_i   => rstn_sys,
-    --    t_wb_out        => dev_bus_master_i(dev_slaves'pos(devs_blinky)),
-    --    t_wb_in         => dev_bus_master_o(dev_slaves'pos(devs_blinky)),
-    --    s_led_o         => blinky_led_o);
-    --end generate;
-
-    ---- change values if in a simulation
-    --g_set_sim_values : if g_simulation generate
-    --    i_blinky_mode_B <=  10;
-    --    i_blinky_mode_C <=  20;
-    --end generate g_set_sim_values;
- 
-
-    ----  for now no errors, no stalling
-    --t_wb_out.err    <= s_error_state;
-    --t_wb_out.stall  <= s_stall_state;
-    --t_wb_out.rty    <= s_retry_state;
-
-    --t_wb_out.ack <= s_ack_state;
-    --s_led_o <= s_led_state and s_led_freq_ctl;
-
-
-    ---- fill the pseudo state machine
-    --s_state_machine_vector(0) <= s_rst_sys_n_i;
-    --s_state_machine_vector(1) <= t_wb_in.cyc;
-    --s_state_machine_vector(2) <= t_wb_in.stb;
-    --s_state_machine_vector(3) <= t_wb_in.we;
-
-    --p_wb_write: process(s_clk_sys_i)
-    --begin
-    --    if rising_edge(s_clk_sys_i) then
-    --        if s_rst_sys_n_i = '0' then
-    --            s_stall_state   <= '0';
-    --            s_error_state   <= '0';
-    --            s_retry_state   <= '0';
-    --            s_blinky_mode_v <= (others => '0');
-    --        elsif s_state_machine_vector = mode_write then
-    --            s_led_state <= t_wb_in.dat(0);
-    --            s_blinky_mode_v <= t_wb_in.dat(2 downto 1);
-    --        end if;
-    --    end if;
-    --end process;
-
-    --p_wb_read: process(s_clk_sys_i)
-    --begin
-    --    if rising_edge(s_clk_sys_i) then
-    --        if s_rst_sys_n_i = '0' then
-    --            t_wb_out.dat    <= (others => '0');
-    --        elsif s_state_machine_vector = mode_read then
-    --            t_wb_out.dat(0) <= s_led_state;
-    --            t_wb_out.dat(2 downto 1) <= s_blinky_mode_v;
-    --        end if;
-    --    end if;
-    --end process;
-
-    --p_wb_ack: process(s_clk_sys_i)
-    --begin
-    --    if rising_edge(s_clk_sys_i) then
-    --        if s_rst_sys_n_i = '0' then
-    --            s_ack_state <= '0';
-    --        else
-    --            if s_ack_state = '0' and t_wb_in.stb = '1' and t_wb_in.cyc = '1' then
-    --                s_ack_state <= '1';
-    --            else
-    --                s_ack_state <= '0';
-    --            end if;
-    --        end if;
-    --    end if;
-    --end process;
-
-    --p_blinky_counter_B: process(s_clk_sys_i)
-    --begin
-    --    if rising_edge(s_clk_sys_i) then
-    --        if s_rst_sys_n_i = '0' then
-    --            s_counter_B <= 0;
-    --        elsif s_counter_B = i_blinky_mode_B then
-    --            s_counter_B <= 0;
-    --            s_blinky_mode_B_toggle <= not s_blinky_mode_B_toggle;
-    --        else
-    --            s_counter_B <= s_counter_B + 1;
-    --        end if;
-    --    end if;
-    --end process;
-
-    --p_blinky_counter_C: process(s_clk_sys_i)
-    --begin
-    --    if rising_edge(s_clk_sys_i) then
-    --        if s_rst_sys_n_i = '0' then
-    --            s_counter_C <= 0;
-    --        elsif s_counter_C = i_blinky_mode_C then
-    --            s_counter_C <= 0;
-    --            s_blinky_mode_C_toggle <= not s_blinky_mode_C_toggle;
-    --        else
-    --            s_counter_C <= s_counter_C + 1;
-    --        end if;
-    --    end if;
-    --end process;
-
-    --s_led_freq_ctl <=   s_blinky_mode_A_toggle when s_blinky_mode_v = c_blinky_mode_A else
-    --                    s_blinky_mode_B_toggle when s_blinky_mode_v = c_blinky_mode_B else
-    --                    s_blinky_mode_C_toggle when s_blinky_mode_v = c_blinky_mode_C else
-    --                    '1' when s_rst_sys_n_i = '0';
 
 end pwm_arch;
