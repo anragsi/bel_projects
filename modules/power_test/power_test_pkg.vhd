@@ -46,5 +46,5 @@ package power_test_pkg is
       );
     end component power_test;
   
-end package POWer_test_pkg;
+end package power_test_pkg;
 

@@ -9,7 +9,7 @@ VCD_VIEWER="gtkwave"
 GTKW_NAME="$TB_NAME.gtkw"
 
 # Files
-PWM_PATH="../src/"
+PWM_PATH="../src"
 VHD_PACK="../../../ip_cores/general-cores/modules/genrams/genram_pkg.vhd \
           ../../../ip_cores/general-cores/modules/wishbone/wishbone_pkg.vhd \
           ../../../ip_cores/general-cores/modules/wishbone/wb_simple_pwm/simple_pwm_wbgen2_pkg.vhd \

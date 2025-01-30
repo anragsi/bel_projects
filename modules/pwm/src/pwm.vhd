@@ -11,8 +11,8 @@ entity pwm is
 
     generic (
         g_simulation                : in boolean := false;
-        g_pwm_channel_num           : integer range 1 to 8 := 1;
-        g_pwm_interface_mode        : t_wishbone_interface_mode      := CLASSIC
+        g_pwm_channel_num           : integer range 1 to 8 := 8;
+        g_pwm_interface_mode        : t_wishbone_interface_mode := PIPELINED
     );
 
     port(
@@ -58,7 +58,8 @@ begin
     PWM_WB : wb_simple_pwm
     generic map(
         g_num_channels          =>  g_pwm_channel_num,
-        g_interface_mode        =>  g_pwm_interface_mode
+        g_interface_mode        =>  g_pwm_interface_mode,
+        g_default_val           =>  2
     )
     port map (
         rst_n_i     =>  s_rst_sys_n_i,

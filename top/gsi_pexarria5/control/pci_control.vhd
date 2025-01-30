@@ -207,9 +207,9 @@ entity pci_control is
     sfp4_mod2         : inout std_logic; -- SDA
 
     -----------------------------------------------------------------------
-    -- Blinky led
+    -- PWM led
     -----------------------------------------------------------------------
-    led_blinky_o      : out std_logic);
+    pwm_o             : out    std_logic_vector(7 downto 0));
 
 end pci_control;
 
@@ -234,9 +234,9 @@ architecture rtl of pci_control is
   signal butis_t0_ts   : std_logic;
 
   -----------------------------------------------------------------------
-  -- Blinky led
+  -- PWM led
   -----------------------------------------------------------------------
-  signal s_blinky_led : std_logic;
+  signal s_pwm_led : std_logic;
 
   constant io_mapping_table : t_io_mapping_table_arg_array(0 to 14) :=
   (
@@ -348,8 +348,8 @@ begin
       lcd_lp_o                => di(1),
       lcd_flm_o               => di(2),
       lcd_in_o                => di(0),
-      -- ge_en_blinky
-      blinky_led_o            => s_blinky_led
+      -- ge_en_pwm
+      pwm_o(0)                => s_pwm_led
       
     );
 
@@ -367,7 +367,7 @@ begin
 
   led(1) <= not (led_link_act and led_link_up); -- red   = traffic/no-link
   --led(2) <= not led_link_up;                  -- blue  = link
-  led(2) <= not s_blinky_led;
+  led(2) <= not s_pwm_led;
   led(3) <= not led_track;                      -- green = timing valid
   led(4) <= not led_pps;                        -- white = PPS
 

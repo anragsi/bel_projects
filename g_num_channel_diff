@@ -1,0 +1,13 @@
+diff --git a/modules/wishbone/wb_simple_pwm/wb_simple_pwm.vhd b/modules/wishbone/wb_simple_pwm/wb_simple_pwm.vhd
+index d6924d5..11c6cdd 100644
+--- a/modules/wishbone/wb_simple_pwm/wb_simple_pwm.vhd
++++ b/modules/wishbone/wb_simple_pwm/wb_simple_pwm.vhd
+@@ -191,6 +191,8 @@ begin  -- behavioral
+ 
+   regs_in.cr_presc_i  <= f_expand_data(presc_val);
+   regs_in.cr_period_i <= f_expand_data(period_val);
++  regs_in.sr_n_channels_i <= std_logic_vector(to_unsigned(g_num_channels,4));
++
+   load_cr: process(clk_sys_i)
+   begin
+     if rising_edge(clk_sys_i) then
